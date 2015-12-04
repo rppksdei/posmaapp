@@ -1,0 +1,26 @@
+<ion-view view-title="Deals">
+  <ion-content>
+  	<div class="list deals-listing">
+
+        <a ng-repeat="item in items" 
+           href="#/app/deals/{{item.id}}"
+           class="item item-thumbnail-left">
+
+          <img ng-src="{{ item.image }}">
+          <h2>{{ item.album }}</h2>
+          <p>{{ item.artist }}</p>
+        </a>
+
+    </div>
+
+
+
+    <!--ion-list>
+      <ion-item ng-repeat="playlist in playlists" href="#/app/playlists/{{playlist.id}}">
+        {{playlist.title}}
+      </ion-item>
+    </ion-list-->
+
+
+  </ion-content>
+</ion-view>

@@ -1,0 +1,75 @@
+<ion-view view-title="{{questionnaires.name}}">
+	<ion-content>
+		Total Questions: {{questionnaires.question.length}} <!--Page: {{currentPage}}  Total: {{pageSize}}-->
+		<ion-list class="questionnaire">
+			<ion-item class="item item-divider border-top wrpnrml" ng-repeat="ques in questionnaires.question| limitTo:pageSize">
+				{{ques.name}}? {{ques._id}}
+				<div class="row" ng-if='ques.answer_type=="text"'>
+					<div class="col">
+						<div class="list">
+							<label class="item item-input">
+								<!--input type="text" placeholder="Answer Answer " maxlength="ques.max_length"-->
+								<textarea rows="5" cols="6">Answer Answer </textarea>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="row" ng-if='ques.answer_type=="dd"'>
+					<div class="col">
+						<label ng-if='ques.answer' class="item item-input item-select">
+							<div class="input-label">
+								Lightsaber
+							</div>
+							<select class="input-label">
+								<option ng-repeat="ans in ques.answer">{{ans.name}} {{ans._id}} {{ans.out_of_range}}</option>
+							</select>
+						</label>
+					</div>
+				</div>
+				<div class="row" ng-if='ques.answer_type=="number"'>
+					<div class="col">
+						<div class="list">
+							<div class="item range range-positive">
+								{{ques.min_range}} <input type="range" name="volume" min="ques.min_range" max="ques.max_range" value="">{{ques.max_range}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" ng-if='ques.answer_type=="rb"'>
+					<div class="col">
+						<ion-list ng-if='ques.answer' class="list">
+							<label ng-repeat="ans in ques.answer" class="item item-radio">
+								<ion-radio ng-repeat="ans in ques.answer" ng-value="ans._id"> {{ans.name}} </ion-radio>
+							</label>
+						</ion-list>
+					</div>
+				</div>
+				<div ng-if='ques.answer_type=="cb"' class="row responsive-sm">
+					<div class="col" ng-repeat="ans in ques.answer">
+						<!--label class="checkbox"-->
+							<input type="checkbox" value="{{ans._id}}">
+						<!--/label-->
+						{{ans.name}} {{ans.out_of_range}}
+					</div>
+				</div>
+			</ion-item>
+			<!--ion-item class="item">
+				<div class="tabs">
+					<a class="tab-item">
+						&lt; Previous
+					</a>
+					<a class="tab-item">
+						Next &gt;
+					</a>
+				</div>
+			</ion-item>
+		</ion-list-->
+		<button ng-if="pageSize < questionnaires.question.length" ng-click="loadNextPage()">
+			Show More
+		</button>
+		<!--ion-infinite-scroll distance="2"
+			on-infinite="loadMoreData()"
+			ng-if="!moredata">
+		</ion-infinite-scroll-->
+	</ion-content>
+</ion-view>

@@ -1,0 +1,24 @@
+<ion-view view-title="Pending Questionnaires">
+  	<ion-content>
+      	<!--ion-item class="quqes-title">
+	        <h3 class="center"> </h3>
+	        <div class="title-date center"> 22 September, 2015</div>
+      	</ion-item-->
+      	
+		<ion-list class="questionnaire" ng-controller="AppCtrl" show-delete="shouldShowDelete" show-reorder="shouldShowReorder" can-swipe="listCanSwipe">
+	      	<ion-item href="/#/app/questions/{{Qitem.questionnaire._id}}" class="item item-divider border-right ques-lnk question-padding" ng-repeat="Qitem in questionnaires">
+		        <div class="ques-title">{{Qitem.questionnaire.name}}</div>
+		        <div class="datetime">
+		        	<span class="time">
+		        		<i class="ion-clock"></i>
+		        		{{Qitem.datetime | date:"h:mma"}}
+		        	</span>
+		        	<span>
+		        		<i class="ion-calendar"></i>
+		        		{{Qitem.datetime | date:"MMMM dd, yyyy"}}
+		        	</span>
+		        </div>
+	      	</ion-item>
+	    </ion-list>
+  	</ion-content>
+</ion-view>
