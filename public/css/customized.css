@@ -144,3 +144,12 @@ h1{
     visibility: visible;
   }
 }
+.save-button{
+	background-color:#23b699;
+	font-weight:500;
+	min-height:30px;
+}
+.save-button button{
+	background-color:#23b699;
+	color: #fff;
+}
