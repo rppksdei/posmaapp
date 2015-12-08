@@ -16,7 +16,7 @@ starter
     if (logout == true) {
       var request = {
           method: 'GET',
-          url: 'http://192.155.246.146:8987/front_patient/loggedout',
+          url: 'http://localhost:8987/front_patient/loggedout',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
           },
@@ -46,7 +46,7 @@ starter
       postData.password = $scope.loginData.password;
       var request = {
           method: 'POST',
-          url: 'http://192.155.246.146:8987/front_patient/login',
+          url: 'http://localhost:8987/front_patient/login',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
           },

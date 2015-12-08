@@ -6,7 +6,7 @@
       	</ion-item-->
       	
 		<ion-list class="questionnaire" ng-controller="AppCtrl" show-delete="shouldShowDelete" show-reorder="shouldShowReorder" can-swipe="listCanSwipe">
-	      	<ion-item href="/#/app/questions/{{Qitem.questionnaire._id}}" class="item item-divider border-right ques-lnk question-padding" ng-repeat="Qitem in questionnaires">
+	      	<ion-item href="/#/app/questions/{{Qitem._id}}" class="item item-divider border-right ques-lnk question-padding" ng-repeat="Qitem in questionnaires">
 		        <div class="ques-title">{{Qitem.questionnaire.name}}</div>
 		        <div class="datetime">
 		        	<span class="time">

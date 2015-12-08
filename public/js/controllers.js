@@ -72,7 +72,7 @@ angular.module('starter.controllers', [])
       var request = {
         method: 'POST',
         data: 'pId=' + postData.patient_id + '&isFilled=' + postData.is_filled,
-        url: 'http://192.155.246.146:8987/notification',
+        url: 'http://localhost:8987/notification',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -93,25 +93,47 @@ angular.module('starter.controllers', [])
   .controller('QuestionsCtrl', function($scope,$stateParams,$http,$q,$state,$cookies) {
     var flag = '';
     var postData = {};
-    postData.questionnaire = $stateParams.id;
-    postData.patient_id = $cookies.get('user_id');
-    postData.is_filled = 0;
-    var request = {
-      method: 'POST',
-      data: 'pId=' + postData.patient_id + '&isFilled=' + postData.is_filled + '&_id=' + postData.questionnaire,
-      url: 'http://192.155.246.146:8987/questionnaire/getList',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    };
-    $http(request).then(function(response){
-      //console.log(response.data);
-      if (!response.data.error) {
-        $scope.questionnaires = response.data;
-      } else{
-        $scope.error_message = response.data.message;
-      }
-    })
+    var notification_id = $stateParams.id;
+    /* get questionid fron notification_id */
+      var request = {
+          method: 'POST',
+          url: 'http://localhost:8987/notification/getQuestionnaire',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          data: '_id=' + notification_id
+      };
+
+      $http(request).then(function(res){
+        console.log('res.data : ', res.data); 
+        if(res.data.questionnaire){
+            postData.questionnaire = res.data.questionnaire;
+            postData.patient_id = $cookies.get('user_id');
+            postData.is_filled = 0;
+            var request = {
+              method: 'POST',
+              data: 'pId=' + postData.patient_id + '&isFilled=' + postData.is_filled + '&_id=' + postData.questionnaire,
+              url: 'http://localhost:8987/questionnaire/getList',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              }
+            };
+            $http(request).then(function(response){
+              console.log(response.data);
+              if (!response.data.error) {
+                $scope.questionnaires = response.data;
+              } else{
+                $scope.error_message = response.data.message;
+              }
+            })
+
+            // $state.go('app.questionnaire');
+
+        }else{
+            $scope.error_message = 'Notification Unavailable.';
+        }
+      })
+    
 
     $scope.quesData = {}; $scope.ansData = {};
     $scope.ques_save = function(){
