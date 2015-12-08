@@ -134,18 +134,16 @@ h1{
 	color: #ff0000;
 	padding: 5px 16px;
 }
-.item-radio input {
-	&:checked + .item-content {
-		background: #f7f7f7;
-	}
-  &:checked + .item-content {
-    background: #f7f7f7;
-  }
-
+.radio-content .item-content{
+	padding: 5px 35px 5px 5px;
 }
 .save-button{
 	background-color:#23b699;
 	font-weight:500;
 	min-height:30px;
 	color: #fff;
+}
+.item-radio .radio-icon {
+    font-size: 18px;
+    padding: 4px 10px 0 0;
 }
