@@ -9,7 +9,7 @@
 	background: none repeat scroll 0 0 #23B699
 }
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-    color: #fff;
+	color: #fff;
 }
 .bar.bar-stable {
 	background: #23B699;
@@ -20,7 +20,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 .bar.bar-stable .title {
 	color: #fff;
-    font-weight: bold;
+	font-weight: bold;
 }
 .item.activated,.item .item-content.activated{
 	background: none repeat scroll 0 0 #23aba6;
@@ -28,7 +28,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 form .item{
 	border: 0 none;
-    margin: 0 0 10px;
+	margin: 0 0 10px;
 }
 .input-label {
 	color:#fff;
@@ -46,12 +46,12 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 	text-transform: uppercase;
 }
 form a.item-content{
-    color: #6EEED5;
-    font-size: 16px;
-    text-decoration: none;
-    padding: 0px !important;
-    background: #23B699 !important;
-    text-align: center;
+	color: #6EEED5;
+	font-size: 16px;
+	text-decoration: none;
+	padding: 0px !important;
+	background: #23B699 !important;
+	text-align: center;
 }
 h1{
 	font-size: 40px;
@@ -59,17 +59,17 @@ h1{
 }
 .main-title{
 	margin: 30px 0 !important;
-    text-align: center;
+	text-align: center;
 }
 .ques-title{
 	color: #23b699;
-    font-size: 14px;
+	font-size: 14px;
 }
 .datetime{
 	color: #bdbdbd;
-    font-size: 12px;
-    margin-top: 7px;
-    text-transform: none;
+	font-size: 12px;
+	margin-top: 7px;
+	text-transform: none;
 }
 .time{
 	float: left;
@@ -89,24 +89,24 @@ h1{
 }
 .title-date{
 	color: #48D4B9;
-    font-size: 12px;
-    line-height: 12px;
+	font-size: 12px;
+	line-height: 12px;
 }
 .quqes-title{
 	background: none repeat scroll 0 0 #23b699;
-    border: 0 none;
-    font-weight: 500;
-    text-transform: uppercase;
+	border: 0 none;
+	font-weight: 500;
+	text-transform: uppercase;
 }
 .ques{
 	color: #bdbdbd;
-    text-transform: none;
+	text-transform: none;
 }
 .item-divider {
-    background-color: #fff;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    border-left: 0px
+	background-color: #fff;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	border-left: 0px
 }
 .border-top{
 	border-top: 2px solid #23b699!important;
@@ -118,11 +118,11 @@ h1{
 	white-space: normal
 }
 .checkbox {
-    padding: 0px;
+	padding: 0px;
 }
 .tabs {
-    background-color: #23B699;
-    color:#fff;
+	background-color: #23B699;
+	color:#fff;
 }
 .activated .ques-title {
 	color: #fff;
@@ -131,16 +131,15 @@ h1{
 	padding: 0px 16px !important;
 }
 .alert-danger {
-    color: #ff0000;
-    padding: 5px 16px;
+	color: #ff0000;
+	padding: 5px 16px;
 }
 .item-radio input {
+	&:checked + .item-content {
+		background: #f7f7f7;
+	}
 
-  &:checked + .item-content {
-    background: #f7f7f7;
-  }
-
-  &:checked + .radio-icon {
-    visibility: visible;
-  }
+	&:checked + .radio-icon {
+		visibility: visible;
+	}
 }
