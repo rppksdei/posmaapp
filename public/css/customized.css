@@ -138,8 +138,14 @@ h1{
 	&:checked + .item-content {
 		background: #f7f7f7;
 	}
+  &:checked + .item-content {
+    background: #f7f7f7;
+  }
 
-	&:checked + .radio-icon {
-		visibility: visible;
-	}
+}
+.save-button{
+	background-color:#23b699;
+	font-weight:500;
+	min-height:30px;
+	color: #fff;
 }
