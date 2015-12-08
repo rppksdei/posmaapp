@@ -15,8 +15,8 @@ angular.module('starter.controllers', [])
       logout = $route.current.$$route.logout;
     } */
     //$rootScope.testvar = 'RAMAN';
-    $rootScope.appUrl = 'http://localhost:8987';
-    console.log($rootScope.appUrl,'--------');
+    $rootScope.appUrl = 'http://192.155.246.146:8987';
+    //console.log($rootScope.appUrl,'--------');
     if (logout == true) {
       var request = {
         method: 'GET',
@@ -66,7 +66,7 @@ angular.module('starter.controllers', [])
     }
   })
   .controller('NotificationCtrl', function($scope,$http,$q,$cookies,$rootScope) {
-    $rootScope.appUrl = 'http://localhost:8987';
+    $rootScope.appUrl = 'http://192.155.246.146:8987';
     var flag = '';
     //$scope.list = function(){
     var postData = {};
@@ -91,7 +91,7 @@ angular.module('starter.controllers', [])
   })
   .controller('QuestionsCtrl', function($scope,$stateParams,$http,$q,$state,$cookies,$rootScope) {
     var flag = '';
-    $rootScope.appUrl = 'http://localhost:8987';
+    $rootScope.appUrl = 'http://192.155.246.146:8987';
     var postData = {};
     var DEFAULT_PAGE_SIZE_STEP = 3;
     $scope.currentPage = 1;
