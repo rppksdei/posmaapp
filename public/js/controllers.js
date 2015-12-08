@@ -90,7 +90,7 @@ angular.module('starter.controllers', [])
     //   $scope.list();
     // };
   })
-  .controller('QuestionsCtrl', function($scope,$stateParams,$http,$q,$cookies) {
+  .controller('QuestionsCtrl', function($scope,$stateParams,$http,$q,$state,$cookies) {
     var flag = '';
     var postData = {};
     postData.questionnaire = $stateParams.id;
@@ -124,17 +124,9 @@ angular.module('starter.controllers', [])
         postData.quesData       = $scope.quesData;
         postData.ansData        = $scope.ansData;
         
-        // for (key in $scope.quesData) {
-        //     var qData = {};
-        //     qData.question = key;
-        //     qData.answer = $scope.quesData[key];
-        //     postData.questions[i] = qData;
-        //     i++;
-        // }
-        
         var request = {
             method: 'POST',
-            url: 'http://192.155.246.146:8987/front_patient/saveans',
+            url: 'http://localhost:8987/front_patient/saveans',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded'
             },
@@ -142,7 +134,12 @@ angular.module('starter.controllers', [])
         };
 
         $http(request).then(function(response){
-          console.log(response.data);
+          // console.log(response.data);
+          if (response.data.success) {
+              $state.go('app.questionnaire');
+          }else{
+              $scope.error_message = response.data.message;
+          }
           // if (!response.data.error) {
           //     if ($scope.remember === true){
           //         var expireDate = new Date();
