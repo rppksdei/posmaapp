@@ -26,7 +26,8 @@ starter
       url: '/login',
       //abstract: true,
       templateUrl: 'templates/login.html',
-      controller: 'authCtrl'
+      controller: 'authCtrl',
+      flag:'login'
     })
     .state('logout', {
       url: '/logout',
@@ -39,15 +40,15 @@ starter
       url: '/app',
       abstract: true,
       templateUrl: 'templates/menu.html',
-      controller: 'AppCtrl'
+      //controller: 'AppCtrl'
     })
     .state('app.questionnaire', {
       url: '/questionnaire',
-      flag: 'notifications',
+      flag: 'Notifications',
       views: {
         'menuContent': {
           templateUrl: 'templates/questionnaire.html',
-          controller: 'NotificationCtrl',
+          controller: 'NotificationCtrl'
         }
       },
       cache:false
