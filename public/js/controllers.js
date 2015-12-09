@@ -94,6 +94,7 @@ angular.module('starter.controllers', [])
     var flag = '';
     var postData = {};
     var notification_id = $stateParams.id;
+    $scope.notification_id = notification_id;
     /* get questionid fron notification_id */
       var request = {
           method: 'POST',
@@ -110,6 +111,9 @@ angular.module('starter.controllers', [])
             postData.questionnaire = res.data.questionnaire;
             postData.patient_id = $cookies.get('user_id');
             postData.is_filled = 0;
+
+            $scope.questionnaire = postData.questionnaire;
+
             var request = {
               method: 'POST',
               data: 'pId=' + postData.patient_id + '&isFilled=' + postData.is_filled + '&_id=' + postData.questionnaire,
@@ -141,11 +145,12 @@ angular.module('starter.controllers', [])
         console.log($scope.quesData);
         console.log($scope.ansData);
 
-        postData.patient        = $cookies.get('user_id');
-        postData.questionnaire  = $stateParams.id;
-        postData.quesData       = $scope.quesData;
-        postData.ansData        = $scope.ansData;
-        
+        postData.patient          = $cookies.get('user_id');
+        postData.notification_id  = $stateParams.id;
+        postData.questionnaire    = $scope.questionnaire;
+        postData.quesData         = $scope.quesData;
+        postData.ansData          = $scope.ansData;
+        // console.log(postData); return;
         var request = {
             method: 'POST',
             url: 'http://localhost:8987/front_patient/saveans',
@@ -157,7 +162,8 @@ angular.module('starter.controllers', [])
 
         $http(request).then(function(response){
           // console.log(response.data);
-          if (response.data.success) {
+          if(response.data.success){
+              $scope.error_message = 'Questions Saved Successfully.';
               $state.go('app.questionnaire');
           }else{
               $scope.error_message = response.data.message;
