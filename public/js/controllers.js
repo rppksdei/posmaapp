@@ -60,9 +60,9 @@ angular.module('starter.controllers', [])
         }
       })
     }
-    //if(flag == 'login'){
-      //$scope.login();
-    //}
+    if(flag == 'login'){
+      $scope.login();
+    }
   })
   .controller('NotificationCtrl', function($state,$scope,$http,$q,$cookies,$rootScope) {
     $rootScope.appUrl = 'http://192.155.246.146:8987';
@@ -136,6 +136,8 @@ angular.module('starter.controllers', [])
         }
       })
     }
+
+
     var notification_id = $stateParams.id;
     $scope.notification_id = notification_id;
     /* get questionid fron notification_id */
@@ -149,7 +151,6 @@ angular.module('starter.controllers', [])
       };
 
       $http(request).then(function(res){
-        console.log('res.data : ', res.data); 
         if(res.data.questionnaire){
             postData.questionnaire = res.data.questionnaire;
             postData.patient_id = $cookies.get('user_id');
@@ -219,46 +220,37 @@ angular.module('starter.controllers', [])
         // }
       })
     }
+
+
     if(flag=='questions'){
       $scope.questions();
-        var postData = {}; 
-        console.log($scope.quesData);
-        console.log($scope.ansData);
+      var postData = {}; 
+      console.log($scope.quesData);
+      console.log($scope.ansData);
 
-        postData.patient          = $cookies.get('user_id');
-        postData.notification_id  = $stateParams.id;
-        postData.questionnaire    = $scope.questionnaire;
-        postData.quesData         = $scope.quesData;
-        postData.ansData          = $scope.ansData;
-        // console.log(postData); return;
-        var request = {
-            method: 'POST',
-            url: $rootScope.appUrl+'/front_patient/saveans',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            data: 'postData=' + JSON.stringify(postData)
-        };
+      postData.patient          = $cookies.get('user_id');
+      postData.notification_id  = $stateParams.id;
+      postData.questionnaire    = $scope.questionnaire;
+      postData.quesData         = $scope.quesData;
+      postData.ansData          = $scope.ansData;
+      // console.log(postData); return;
+      var request = {
+          method: 'POST',
+          url: $rootScope.appUrl+'/front_patient/saveans',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          data: 'postData=' + JSON.stringify(postData)
+      };
 
-        $http(request).then(function(response){
-          // console.log(response.data);
-          if(response.data.success){
-              $scope.error_message = 'Questions Saved Successfully.';
-              $state.go('app.questionnaire');
-          }else{
-              $scope.error_message = response.data.message;
-          }
-          // if (!response.data.error) {
-          //     if ($scope.remember === true){
-          //         var expireDate = new Date();
-          //         expireDate.setDate(expireDate.getDate() + 30);
-          //         $cookies.put('user_id', response.data.user_id, {'expires': expireDate});
-          //     }
-          //     $state.go('app.questionnaire');
-          // } else{
-          //     $scope.error_message = response.data.message;
-          // }
-        })
-        
+      $http(request).then(function(response){
+        // console.log(response.data);
+        if(response.data.success){
+            $scope.error_message = 'Questions Saved Successfully.';
+            $state.go('app.questionnaire');
+        }else{
+            $scope.error_message = response.data.message;
+        }
+      })
     }
   });
