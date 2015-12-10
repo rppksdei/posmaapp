@@ -63,8 +63,6 @@ app.use(function(err, req, res, next) {
   });
 });
 
-app.listen(8988,function(){
-console.log('serever app is running');
-});
+
 module.exports = app;
 
