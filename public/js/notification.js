@@ -10,7 +10,7 @@ angular.module('starter.controllers', [])
 		console.log('HERE');
 		var request = {
 			method: 'GET',
-			url: 'http://192.155.246.146:8987/notification',
+			url: 'http://localhost:8987/notification',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
