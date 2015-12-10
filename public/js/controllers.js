@@ -60,9 +60,9 @@ angular.module('starter.controllers', [])
         }
       })
     }
-    if(flag == 'login'){
-      $scope.login();
-    }
+    //if(flag == 'login'){
+     // $scope.login();
+    //}
   })
   .controller('NotificationCtrl', function($state,$scope,$http,$q,$cookies,$rootScope) {
     $rootScope.appUrl = 'http://192.155.246.146:8987';
