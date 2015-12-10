@@ -10,7 +10,7 @@ angular.module('starter.controllers', [])
       flag = $state.current.flag;
     }
     
-    $rootScope.appUrl = 'http://192.155.246.146:8987';
+    $rootScope.appUrl = 'http://192.155.246.146:3100';
     if (logout == true) {
       var request = {
         method: 'GET',
@@ -65,7 +65,7 @@ angular.module('starter.controllers', [])
     //}
   })
   .controller('NotificationCtrl', function($state,$scope,$http,$q,$cookies,$rootScope) {
-    $rootScope.appUrl = 'http://192.155.246.146:8987';
+    $rootScope.appUrl = 'http://192.155.246.146:3100';
     var flag = false;
     if (typeof $state.current.flag !== 'undefined') {
       flag = $state.current.flag;
@@ -100,7 +100,7 @@ angular.module('starter.controllers', [])
     if (typeof $state.current.flag !== 'undefined') {
       flag = $state.current.flag;
     }
-    $rootScope.appUrl = 'http://192.155.246.146:8987';
+    $rootScope.appUrl = 'http://192.155.246.146:3100';
     var postData = {};
 
 
@@ -186,7 +186,7 @@ angular.module('starter.controllers', [])
 
     $scope.quesData = {}; $scope.ansData = {};
     $scope.ques_save = function(){
-      $rootScope.appUrl = 'http://192.155.246.146:8987';
+      $rootScope.appUrl = 'http://192.155.246.146:3100';
       var postData = {}; 
         postData.patient          = $cookies.get('user_id');
         postData.notification_id  = $stateParams.id;
