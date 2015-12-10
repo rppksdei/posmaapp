@@ -1,7 +1,7 @@
 angular.module('starter.controllers', [])
   .controller('AppCtrl', function($state,$scope,$http,$q,$cookies,$rootScope) {
   })
-  .controller('authCtrl', function($scope,$http,$ionicModal, $timeout,$state, $location,$cookies,$rootScope) {
+  .controller('authCtrl', function($scope,$http,$ionicModal, $timeout,$state, $location,$cookies,$rootScope, Flash) {
     // Form data for the login modal
     var flag = false;
     var logout = false;
@@ -95,7 +95,7 @@ angular.module('starter.controllers', [])
       $scope.notifications();
     }
   })
-  .controller('QuestionsCtrl', function($scope,$stateParams,$http,$q,$state,$cookies,$rootScope) {
+  .controller('QuestionsCtrl', function($scope,$stateParams,$http,$q,$state,$cookies,$rootScope, Flash) {
     var flag = false;
     if (typeof $state.current.flag !== 'undefined') {
       flag = $state.current.flag;
@@ -238,7 +238,8 @@ angular.module('starter.controllers', [])
       $http(request).then(function(response){
           // console.log(response.data);
           if(response.data.success){
-              $scope.error_message = 'Questions Saved Successfully.';
+              // $scope.error_message = 'Questions Saved Successfully.';
+              Flash.create('success', 'Questions Saved Successfully.', 'alert alert-success');
               $state.go('app.questionnaire');
           }else{
               $scope.error_message = response.data.message;
