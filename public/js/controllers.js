@@ -141,6 +141,7 @@ angular.module('starter.controllers', [])
     var notification_id = $stateParams.id;
     $scope.notification_id = notification_id;
     /* get questionid fron notification_id */
+
       var request = {
           method: 'POST',
           url: $rootScope.appUrl+'/notification/getQuestionnaire',
@@ -161,7 +162,7 @@ angular.module('starter.controllers', [])
             var request = {
               method: 'POST',
               data: 'pId=' + postData.patient_id + '&isFilled=' + postData.is_filled + '&_id=' + postData.questionnaire,
-              url: 'http://localhost:8987/questionnaire/getList',
+              url: $rootScope.appUrl+'/questionnaire/getList',
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
               }
