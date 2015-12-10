@@ -147,3 +147,7 @@ h1{
     font-size: 18px;
     padding: 4px 10px 0 0;
 }
+.left-menu a{
+    background: #23aba6 !important;
+    color: #fff;
+}
