@@ -64,6 +64,17 @@ starter
         }
       }
     })
+    .state('app.profile', {
+      cache:false,
+      url: '/profile',
+      flag: 'profile',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/profile.html',
+          //controller: 'PatientCtrl',
+        }
+      }
+    })
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
 });

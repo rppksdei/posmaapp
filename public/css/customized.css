@@ -151,3 +151,13 @@ h1{
     background: #23aba6 !important;
     color: #fff;
 }
+.item-input .input-label{
+	color:#a0a0a0;
+	font-size:14px;
+}
+.questionnaire .item-input {
+    padding: 6px 0 5px 0px;
+}
+.left-padding{
+	padding-left: 35px !important	;
+}
