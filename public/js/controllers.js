@@ -1,9 +1,8 @@
 angular.module('starter.controllers', [])
-  .controller('AppCtrl', function($state,$scope,$http,$q,$cookies,$rootScope) {
-  })
+  .controller('AppCtrl', function($state,$scope,$http,$q,$cookies,$rootScope) {})
   .controller('authCtrl', function($scope,$http,$ionicModal, $timeout,$state, $location,$cookies,$rootScope, Flash) {
-    localStorage.setItem("apiurl", "http://192.155.246.146:8987");
-    $rootScope.appUrl = 'http://192.155.246.146:8987';
+    localStorage.setItem("apiurl", "http://localhost:8987");
+    $rootScope.appUrl = 'http://localhost:8987';
     // Form data for the login modal
     var flag = false;
     var logout = false;
@@ -53,6 +52,7 @@ angular.module('starter.controllers', [])
             var expireDate = new Date();
             expireDate.setDate(expireDate.getDate() + 30);
             $cookies.put('user_id', response.data.user_id, {'expires': expireDate});
+            $cookies.put('password', response.data.password, {'expires': expireDate});
           //}
           $state.go('app.questionnaire');
         } else {
@@ -76,7 +76,7 @@ angular.module('starter.controllers', [])
       $scope.getDetails();
     }
   })
-  .controller('NotificationCtrl', function($state,$scope,$http,$q,$cookies,$rootScope) {
+  .controller('NotificationCtrl', function($state,$scope,$http,$q,$cookies,$rootScope,$ionicPopup, $timeout,moment) {
     console.log($rootScope.appUrl);
     if(typeof $rootScope.appUrl === 'undefined'){
       $rootScope.appUrl = localStorage.getItem("apiurl");
@@ -85,6 +85,96 @@ angular.module('starter.controllers', [])
     if (typeof $state.current.flag !== 'undefined') {
       flag = $state.current.flag;
     }
+    
+    $scope.changePassword = function(){
+        if(typeof $rootScope.appUrl === 'undefined'){
+          $rootScope.appUrl = localStorage.getItem("apiurl");
+        }
+        var postData = {}; $scope.cpData = {};
+        postData.patient   = $cookies.get('user_id');
+        postData.password  = $cookies.get('password');
+        
+        // An elaborate, custom popup
+          var myPopup = $ionicPopup.show({
+            template: "<div class='col'><div class='list'><label class='item item-input'><input type='password' name='oldpassword' value='' ng-model='cpData.oldpassword' placeholder='Old Password' ngMinlength=6 /></label></div><div class='list'><label class='item item-input'><input type='password' name='newpassword' value='' placeholder='New Password' ng-model='cpData.newpassword' /></label></div><div class='list'><label class='item item-input'><input type='password' name='confirmpassword' value='' ng-model='cpData.confirmpassword' placeholder='Confirm Password' /></label></div></div>",
+            title: 'Change Password',
+            scope: $scope,
+            buttons: [
+              { text: 'Cancel',type: 'button-small' },
+              {
+                text: 'Save',
+                type: 'button button-dark button-small',
+                onTap: function(e) {
+                  //if(!$scope.cpData.oldpassword) {
+                  //  //don't allow the user to close unless he enters wifi password
+                  //  e.preventDefault();
+                  //  alert('Old password is required');
+                  //}else if(!$scope.cpData.newpassword) {
+                  //  e.preventDefault();
+                  //  alert('New password is required');
+                  //}else if(!$scope.cpData.confirmpassword) {
+                  //  e.preventDefault();
+                  //  alert('Confirm password is required');
+                  //}
+                  //else{
+                  if($scope.cpData.oldpassword && $scope.cpData.newpassword && $scope.cpData.confirmpassword) {
+                    alert(1); return;
+                      postData._id = $cookies.get('user_id');
+                      postData.password = $scope.cpData.newpassword;
+
+                      var request = {
+                        method: 'POST',
+                        data: '_id=' + postData._id + '&password=' + postData.password,
+                        url: $rootScope.appUrl+'/patient/updatepassword',
+                        headers: {
+                          'Content-Type': 'application/x-www-form-urlencoded'
+                        }
+                      };
+                      $http(request).then(function(response){
+                        console.log('response = ',response.data);
+                        //if (!response.data.error) {
+                        //  $scope.questionnaires = response.data;
+                        //} else{
+                        //  $scope.error_message = response.data.message;
+                        //}
+                      })
+                  }else{
+                    alert(0); return;
+                  }
+                  //}
+                }
+              }
+            ]
+          });
+          myPopup.then(function(res) {
+            console.log('Tapped!', res);
+          });
+          //$timeout(function() {
+          //   myPopup.close(); //close the popup after 3 seconds for some reason
+          //}, 3000);
+        
+        /*
+        var request = {
+          method: 'POST',
+          url: $rootScope.appUrl+'/front_patient/saveans',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          data: 'postData=' + JSON.stringify(postData)
+        };
+        $http(request).then(function(response){
+          // console.log(response.data);
+          if(response.data.success){
+            // $scope.error_message = 'Questions Saved Successfully.';
+            Flash.create('success', 'Questions Saved Successfully.', 'alert alert-success');
+            $state.go('app.questionnaire');
+          }else{
+            $scope.error_message = response.data.message;
+          }
+        })
+        */
+    }
+    
     $scope.notifications = function(){
       var postData = {};
       postData.patient_id = $cookies.get('user_id');
@@ -100,11 +190,18 @@ angular.module('starter.controllers', [])
       $http(request).then(function(response){
         if (!response.data.error) {
           $scope.questionnaires = response.data;
+          for (var i = 0; i < response.data.length; i++) {
+                $scope.questionnaires[i].ntime   = moment.unix(response.data[i].datetime).format('HH:mm');
+                $scope.questionnaires[i].ndate   = moment.unix(response.data[i].datetime).format('MM/DD/YYYY');
+          }
+          console.log($scope.questionnaires);
         } else{
           $scope.error_message = response.data.message;
         }
       })
     }
+    
+    
     if(flag == 'Notifications'){
       $scope.notifications();
     }
@@ -219,4 +316,5 @@ angular.module('starter.controllers', [])
     if(flag=='questions'){
       $scope.questions();
     }
-  });
+  })
+  ;

@@ -161,3 +161,7 @@ h1{
 .left-padding{
 	padding-left: 35px !important	;
 }
+/* added by gurpreet */
+.popup-head{
+	background : #23b699 none repeat scroll 0 0;
+}
