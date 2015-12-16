@@ -23,7 +23,7 @@ angular.module('starter.controllers', [])
       };
       $http(request).then(function(response){
         if (response.data.success == true) {
-          $cookies.remove('user_id');
+          $cookies.remove('patient_id');
           $rootScope.user = {};
           $state.go('login');
         } else{
@@ -46,13 +46,13 @@ angular.module('starter.controllers', [])
         data: 'username=' + postData.username + '&password=' + postData.password
       };
       $http(request).then(function(response){
-        console.log(response.data);
         if (!response.data.error) {
           //if ($scope.remember === true){
             var expireDate = new Date();
             expireDate.setDate(expireDate.getDate() + 30);
             $cookies.put('user_id', response.data.user_id, {'expires': expireDate});
             $cookies.put('password', response.data.password, {'expires': expireDate});
+            $cookies.put('patient_id', response.data.user_id, {'expires': expireDate});
           //}
           $state.go('app.questionnaire');
         } else {
@@ -61,7 +61,7 @@ angular.module('starter.controllers', [])
       })
     }
   })
-  .controller('PatientCtrl', function($state,$scope,$http,$q,$cookies,$rootScope) {
+  .controller('PatientCtrl', function($state,$scope,$http,$q,$cookies,$rootScope,Flash) {
     if(typeof $rootScope.appUrl === 'undefined'){
       $rootScope.appUrl = localStorage.getItem("apiurl");
     }
@@ -70,14 +70,73 @@ angular.module('starter.controllers', [])
       flag = $state.current.flag;
     }
     $scope.getDetails = function(){
-      console.log('HERE');
+      var patientData = {};
+      var patient_id = $cookies.get('user_id');
+      var request = {
+        method: 'POST',
+        data: 'pId=' + patient_id,
+        url: $rootScope.appUrl+'/front_patient/getPatient',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      };
+      $http(request).then(function(response){
+        if (!response.data.error) {
+          $scope.patientData = response.data;
+          $scope.currentDate = new Date();
+          $scope.minDate = new Date(2105, 6, 1);
+          $scope.maxDate = new Date(2015, 6, 31);
+          $scope.datePickerCallback = function (val) {
+            if (!val) { 
+              console.log('Date not selected');
+            } else {
+              console.log('Selected date is : ', val);
+            }
+          };
+        } else{
+          $scope.error_message = response.data.message;
+        }
+      })
+    }
+    $scope.getBMI = function(){
+        var height = $scope.patientData.height;
+        var weight = $scope.patientData.weight;
+        var finalBmi = '';
+        if(weight > 0 && height > 0){   
+            finalBmi = (weight/(height/100*height/100)).toFixed(2);
+        }
+        $scope.patientData.bmi = finalBmi;
+    }
+    $scope.savePatient = function(){
+      var post_patientData = {};
+      post_patientData = JSON.stringify($scope.patientData);
+      var looged_in_patient = $cookies.get('patient_id');
+      if(looged_in_patient == $scope.patientData._id){
+        var request = {
+          method: 'POST',
+          url: localStorage.getItem("apiurl")+'/front_patient/update',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          data: 'post_patientData=' + post_patientData
+        };
+        $http(request).then(function(response){
+          if (!response.data.error) {
+            console.log(response.data);
+            $scope.error_message = response.data.success;
+            Flash.create('success', $scope.error_message, 'alert alert-success');
+          } else {
+            $scope.error_message = response.data.message;
+          }
+        })
+      }
     }
     if(flag == 'profile'){
       $scope.getDetails();
     }
   })
+
   .controller('NotificationCtrl', function($state,$scope,$http,$q,$cookies,$rootScope,$ionicPopup, $timeout,moment) {
-    console.log($rootScope.appUrl);
     if(typeof $rootScope.appUrl === 'undefined'){
       $rootScope.appUrl = localStorage.getItem("apiurl");
     }
@@ -270,7 +329,6 @@ angular.module('starter.controllers', [])
           }
         };
         $http(request).then(function(response){
-          console.log(response.data);
           if (!response.data.error) {
             $scope.questionnaires = response.data;
           } else{
@@ -303,7 +361,6 @@ angular.module('starter.controllers', [])
         data: 'postData=' + JSON.stringify(postData)
       };
       $http(request).then(function(response){
-        // console.log(response.data);
         if(response.data.success){
           // $scope.error_message = 'Questions Saved Successfully.';
           Flash.create('success', 'Questions Saved Successfully.', 'alert alert-success');

@@ -1,59 +1,84 @@
 <ion-view view-title="Update Profile">
 	<ion-content>
-		<form name="quesForm" id="quesForm" ng-submit="ques_save();" novalidate="">
+		<div flash-message="5000" ></div>
+		<form name="patientForm" id="patientForm" ng-submit="savePatient();" novalidate="">
 			<ion-list class="questionnaire">
 				<ion-item class="item item-divider border-top wrpnrml">
+					<div class="row padding-non">
+						<div class="col padding-non">First Name</div>
+						<div class="col col-80 padding-non">
+							<input placeholder="Frist Name" type="text" name="first_name" id="first_name" required value="" ng-model="patientData.first_name" class="fullwidth"/>
+						</div>
+					</div>
+					<div class="row margintop padding-non">
+					  <div class="col padding-non"> </div>
+					  <div class="col  col-80 padding-non fullwidth error-label" ng-show="patientForm.first_name.$dirty && (patientForm.first_name.$error.required || errordetail.first_name)">First name is required.</div>
+					</div>
+
+				</ion-item>
+
+				<ion-item class="item item-divider border-top wrpnrml">
 					<label class="item-input">
-					  <span class="input-label">First Name</span>
-					  <input placeholder="Frist Name" type="text" name="firstname" value="" ng-model="patientData.first_name" class="left-padding"/>
+						<span class="input-label">Last Name</span>
+						<input placeholder="Last Name" type="text" name="lastname" value="" ng-model="patientData.last_name" class="left-padding"/>
 					</label>
 				</ion-item>
 				<ion-item class="item item-divider border-top wrpnrml">
 					<label class="item-input">
-					  <span class="input-label">Last Name</span>
-					  <input placeholder="Last Name" type="text" name="lastname" value="" ng-model="patientData.last_name" class="left-padding"/>
+						<span class="input-label">Email</span>
+						<input placeholder="Email" type="email" name="email" value="" ng-model="patientData.email" class="left-padding"/>
+					</label>
+				</ion-item>
+				<!--ion-item class="item item-divider border-top wrpnrml">
+					<label class="item-input">
+						<span class="input-label">DOB</span-->
+						<!--datepicker>
+							<input ng-model="date3" type="text" class="angular-datepicker-input"/>
+						</datepicker-->
+						<!--ionic-datepicker date="currentDate" min="minDate" max="maxDate" callback="datePickerCallback">
+						<button class="button datebutton">{{currentDate | date:'MMMM dd,yyyy'}}</button>
+					</ionic-datepicker>
+					</label>
+				</ion-item-->
+				<ion-item class="item item-divider border-top wrpnrml">
+					<label class="item-input item-select prf-gender">
+						<span class="input-label">Gender</span>
+						<!--input placeholder="Gender" type="text" name="gender" ng-model="patientData.gender" class="left-padding"/-->
+						<select class="input-label left-padding" ng-model="patientData.gender">
+							<option value="">-Select Gender-</option>
+							<option value="F">Female</option>
+							<option value="M">Male</option>
+						</select>
 					</label>
 				</ion-item>
 				<ion-item class="item item-divider border-top wrpnrml">
 					<label class="item-input">
-					  <span class="input-label">Email</span>
-					  <input placeholder="Email" type="text" name="email" value="" ng-model="patientData.email" class="left-padding"/>
+						<span class="input-label">Height</span>
+						<input placeholder="Height" type="text" ng-change="getBMI()" name="height" ng-model="patientData.height" class="left-padding"/>
 					</label>
 				</ion-item>
 				<ion-item class="item item-divider border-top wrpnrml">
 					<label class="item-input">
-					  <span class="input-label">DOB</span>
-					  <input placeholder="DOB" type="text" name="dob" value="" ng-model="patientData.dob" class="left-padding"/>
+						<span class="input-label">Weight</span>
+						<input placeholder="Weight" type="text" ng-change="getBMI()" name="weight" ng-model="patientData.weight" class="left-padding"/>
 					</label>
 				</ion-item>
 				<ion-item class="item item-divider border-top wrpnrml">
 					<label class="item-input">
-					  <span class="input-label">Gender</span>
-					  <input placeholder="Gender" type="text" name="gender" value="" ng-model="patientData.gender" class="left-padding"/>
+						<span class="input-label">BMI</span>
+						<input placeholder="BMI" type="text" name="bmi" ng-model="patientData.bmi" class="left-padding" ng-disabled="true"/>
 					</label>
 				</ion-item>
 				<ion-item class="item item-divider border-top wrpnrml">
 					<label class="item-input">
-					  <span class="input-label">Height</span>
-					  <input placeholder="Height" type="text" name="height" value="" ng-model="patientData.height" class="left-padding"/>
+						<span class="input-label">Mobile</span>
+						<input placeholder="Mobile Numebr" type="text" name="mobile" value="" ng-model="patientData.mobile" class="left-padding"/>
 					</label>
 				</ion-item>
 				<ion-item class="item item-divider border-top wrpnrml">
 					<label class="item-input">
-					  <span class="input-label">Weight</span>
-					  <input placeholder="Weight" type="text" name="weight" value="" ng-model="patientData.weight" class="left-padding"/>
-					</label>
-				</ion-item>
-				<ion-item class="item item-divider border-top wrpnrml">
-					<label class="item-input">
-					  <span class="input-label">Mobile</span>
-					  <input placeholder="Mobile Numebr" type="text" name="mobile" value="" ng-model="patientData.mobile" class="left-padding"/>
-					</label>
-				</ion-item>
-				<ion-item class="item item-divider border-top wrpnrml">
-					<label class="item-input">
-					  <span class="input-label">Address</span>
-					  <input placeholder="Address" type="text" name="address" value="" ng-model="patientData.address" class="left-padding"/>
+						<span class="input-label">Address</span>
+						<input placeholder="Address" type="text" name="address" value="" ng-model="patientData.address1" class="left-padding"/>
 					</label>
 				</ion-item>
 				<button type="submit" class="button button-block button-dark">
