@@ -161,3 +161,24 @@ h1{
 .left-padding{
 	padding-left: 35px !important	;
 }
+.prf-gender select{
+	padding: 0 40px 0 0;
+	width: 84%;
+	direction: ltr;
+	max-width: 100%
+}
+input.ng-invalid-required{
+	border:1px solid #ff0000!important;
+}
+.error-label{
+	color:#ff0000;
+}
+.padding-non{
+	padding: 0px !important;
+}
+.fullwidth{
+	width:100% !important;
+}
+.margintop{
+	margin-top: 0px !important;
+}
