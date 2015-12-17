@@ -12,7 +12,7 @@
 				</div>
 			</div-->
 			<ion-item class="item item-divider border-top wrpnrml" ng-repeat="ques in questionnaires.question | limitTo:pageSize">
-				<Q: {{ques.name}}
+				Q: {{ques.name}}
 				<div class="row" ng-if='ques.answer_type=="rb"'>
 					<div class="col">
 						<ion-list ng-if='ques.answer' class="list">

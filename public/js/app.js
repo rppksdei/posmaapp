@@ -3,7 +3,9 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-var starter = angular.module('starter', ['ionic','starter.controllers','ngCookies','flash'])
+
+var starter = angular.module('starter', ['ionic','starter.controllers','ngCookies','flash','angularMoment','ionic-datepicker'])
+
 //angular.module('starter', ['ionic', 'starter.controllers'])
 starter
 .run(function($ionicPlatform) {
@@ -61,6 +63,29 @@ starter
         'menuContent': {
           templateUrl: 'templates/questions.html',
           controller: 'QuestionsCtrl',
+        }
+      }
+    })
+    /*
+    .state('app.questions', {
+      cache:false,
+      url: '/changepassword',
+      flag: 'changepassword',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/changepassword.html',
+          controller: 'ChangepasswordCtrl',
+        }
+      }
+    }) */
+    .state('app.profile', {
+      cache:false,
+      url: '/profile',
+      flag: 'profile',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/profile.html',
+          controller: 'PatientCtrl',
         }
       }
     })
