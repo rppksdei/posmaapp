@@ -210,3 +210,9 @@ select {
     color: #3c763d;
     padding: 10px 30px 10px 8px;
 }
+.error-container{
+	color: #ff0000;
+}
+.login-err{
+	margin: -10px 0 10px
+}

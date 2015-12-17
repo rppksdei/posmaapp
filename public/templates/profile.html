@@ -13,11 +13,10 @@
 						</div>
 					</div>
 					<div class="row margintop padding-non" ng-show="patientForm.first_name.$dirty && (patientForm.first_name.$error.required || errordetail.first_name)">
-					  <div class="col padding-non"> </div>
-					  <div class="col  col-70 padding-non fullwidth error-label">First name is required.</div>
+						<div class="col padding-non"> </div>
+						<div class="col  col-70 padding-non fullwidth error-label">First name is required.</div>
 					</div>
 				</ion-item>
-
 				<ion-item class="item item-divider border-top wrpnrml">
 					<div class="row padding-non">
 						<div class="col padding-non">
@@ -43,7 +42,7 @@
 					</div>
 					<div class="row margintop padding-non" ng-show="patientForm.email.$dirty && (patientForm.email.$error.required || errordetail.email)">
 					  <div class="col padding-non"> </div>
-					  <div class="col  col-70 padding-non fullwidth error-label" >Email is required.</div>
+					  <div class="col  col-70 padding-non fullwidth error-label">Email is required.</div>
 					</div>
 				</ion-item>
 				<!--ion-item class="item item-divider border-top wrpnrml">
@@ -154,10 +153,10 @@
 					  <div class="col  col-70 padding-non fullwidth error-label">Address is required.</div>
 					</div>
 				</ion-item>
-				<button type="submit" class="button button-block button-dark">
+				<button type="submit" class="button button-block ng-disabled="loginForm.$invalid" button-dark">
 					Update
 				</button>
 			</ion-list>
 		</form>
 	</ion-content>
-</ion-view>
+</ion-view>x
