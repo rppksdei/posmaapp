@@ -1,7 +1,7 @@
 angular.module('starter.controllers', [])
 .controller('NotificationCtrl', function($scope,$http,$q) {
 	var flag = '';
-	console.log('gfjkdfj');
+	//console.log('gfjkdfj');
  	//$scope.list = function(){
 		console.log('list');
 		var postData = {};
