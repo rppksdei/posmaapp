@@ -165,77 +165,10 @@ angular.module('starter.controllers', [])
         $scope.old_pwd = '';
         postData.patient   = $cookies.get('user_id');
         postData.password  = $cookies.get('password');
+
       console.log('postData : ',postData);
         $scope.old_pwd = postData.password;
         $scope.modal.show();
-      /*
-        // An elaborate, custom popup
-          var myPopup = $ionicPopup.show({
-            template: "<div class='col'><div class='list'><label class='item item-input'><input type='password' name='oldpassword' value='' ng-model='cpData.oldpassword' placeholder='Old Password' ngMinlength=4 /></label></div><div class='list'><label class='item item-input'><input type='password' name='newpassword' value='' placeholder='New Password' ng-model='cpData.newpassword' /></label></div><div class='list'><label class='item item-input'><input type='password' name='confirmpassword' value='' ng-model='cpData.confirmpassword' placeholder='Confirm Password' /></label></div></div>",
-            title: 'Change Password',
-            scope: $scope,
-            buttons: [
-              { text: 'Cancel',type: 'button-small' },
-              {
-                text: 'Save',
-                type: 'button button-dark button-small',
-                onTap: function(e) {
-                  if($scope.cpData.oldpassword && $scope.cpData.newpassword && $scope.cpData.confirmpassword) {
-                    alert(1); return;
-                      postData._id = $cookies.get('user_id');
-                      postData.password = $scope.cpData.newpassword;
-
-                      var request = {
-                        method: 'POST',
-                        data: '_id=' + postData._id + '&password=' + postData.password,
-                        url: $rootScope.appUrl+'/patient/updatepassword',
-                        headers: {
-                          'Content-Type': 'application/x-www-form-urlencoded'
-                        }
-                      };
-                      $http(request).then(function(response){
-                        console.log('response = ',response.data);
-                        //if (!response.data.error) {
-                        //  $scope.questionnaires = response.data;
-                        //} else{
-                        //  $scope.error_message = response.data.message;
-                        //}
-                      })
-                  }else{
-                    alert(0); return;
-                  }
-                }
-              }
-            ]
-          });
-          myPopup.then(function(res) {
-            console.log('Tapped!', res);
-          });
-        */
-          //$timeout(function() {
-          //   myPopup.close(); //close the popup after 3 seconds for some reason
-          //}, 3000);
-        
-        /*
-        var request = {
-          method: 'POST',
-          url: $rootScope.appUrl+'/front_patient/saveans',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          data: 'postData=' + JSON.stringify(postData)
-        };
-        $http(request).then(function(response){
-          // console.log(response.data);
-          if(response.data.success){
-            // $scope.error_message = 'Questions Saved Successfully.';
-            Flash.create('success', 'Questions Saved Successfully.', 'alert alert-success');
-            $state.go('app.questionnaire');
-          }else{
-            $scope.error_message = response.data.message;
-          }
-        })
-        */
     }
     
     $scope.cp_save = function(){
@@ -288,7 +221,6 @@ angular.module('starter.controllers', [])
                 $scope.questionnaires[i].ntime   = moment.unix(response.data[i].datetime).format('HH:mm');
                 $scope.questionnaires[i].ndate   = moment.unix(response.data[i].datetime).format('MM/DD/YYYY');
           }
-          console.log($scope.questionnaires);
         } else{
           $scope.error_message = response.data.message;
         }
@@ -310,6 +242,8 @@ angular.module('starter.controllers', [])
     }
     var postData = {};
     $scope.questions = function(){
+      $scope.quesData = {};
+      $scope.ansData = {};
       var DEFAULT_PAGE_SIZE_STEP = 3;
       $scope.currentPage = 1;
       $scope.pageSize = $scope.currentPage * DEFAULT_PAGE_SIZE_STEP; 
@@ -322,71 +256,82 @@ angular.module('starter.controllers', [])
       postData.questionnaire = $stateParams.id;
       postData.patient_id = $cookies.get('user_id');
       postData.is_filled = 0;
-      var request = {
-        method: 'POST',
-        data: 'pId=' + postData.patient_id + '&isFilled=' + postData.is_filled + '&_id=' + postData.questionnaire,
-        url: $rootScope.appUrl+'/questionnaire/getList',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      };
-      $http(request).then(function(response){
-        if (!response.data.error) {
-          $scope.questionnaires = response.data;
-        } else{
-          $scope.error_message = response.data.message;
-        }
-      })
-    }
-    var notification_id = $stateParams.id;
-    $scope.notification_id = notification_id;
-    /* get questionid fron notification_id */
-    var request = {
-      method: 'POST',
-      url: $rootScope.appUrl+'/notification/getQuestionnaire',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      data: '_id=' + notification_id
-    };
-    $http(request).then(function(res){
-      if(res.data.questionnaire){
-        postData.questionnaire = res.data.questionnaire;
-        postData.patient_id = $cookies.get('user_id');
-        postData.is_filled = 0;
-        $scope.questionnaire = postData.questionnaire;
+
+      var notification_id = $stateParams.id;
+        $scope.notification_id = notification_id;
+        $scope.notification = {};
         var request = {
           method: 'POST',
-          data: 'pId=' + postData.patient_id + '&isFilled=' + postData.is_filled + '&_id=' + postData.questionnaire,
-          url: $rootScope.appUrl+'/questionnaire/getList',
+          url: $rootScope.appUrl+'/notification/getQuestionnaire',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
-          }
+          },
+          data: '_id=' + notification_id
         };
-        $http(request).then(function(response){
-          if (!response.data.error) {
-            $scope.questionnaires = response.data;
-          } else{
-            $scope.error_message = response.data.message;
+        $http(request).then(function(res){
+          if(res.data.questionnaire){
+            postData.questionnaire = res.data.questionnaire._id;
+            $scope.notification.clinic = res.data.questionnaire.clinic;
+            $scope.notification.datetime = res.data.created;
+            postData.patient_id = $cookies.get('user_id');
+            postData.is_filled = 0;
+            $scope.questionnaire = postData.questionnaire;
+            var request = {
+              method: 'POST',
+              data: 'pId=' + postData.patient_id + '&isFilled=' + postData.is_filled + '&_id=' + postData.questionnaire,
+              url: $rootScope.appUrl+'/questionnaire/getList',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              }
+            };
+            $http(request).then(function(response){
+              if (!response.data.error) {
+                $scope.questionnaires = response.data;
+              } else{
+                $scope.error_message = response.data.message;
+              }
+            })
+            // $state.go('app.questionnaire');
+          }else{
+            $scope.error_message = 'Notification Unavailable.';
           }
         })
-        // $state.go('app.questionnaire');
-      }else{
-        $scope.error_message = 'Notification Unavailable.';
-      }
-    })
-    $scope.quesData = {}; $scope.ansData = {};
+    }
+    
     $scope.ques_save = function(){
       //$rootScope.appUrl = 'http://localhost:8987';
       if(typeof $rootScope.appUrl === 'undefined'){
         $rootScope.appUrl = localStorage.getItem("apiurl");
       }
-      var postData = {}; 
+      var admin_alerts = {};
+      /* To store admin alerts */
+      if(typeof $scope.quesData != 'undefined'){
+        for(key in $scope.quesData){
+          var ansValArr = new Array();
+          var andVal = '';
+          ansValArr = $scope.quesData[key].split('-');
+          andVal = ansValArr[0];
+          andVal = ansValArr[1];
+          $scope.quesData[key] = andVal;
+          if(andVal == 'true'){
+            admin_alerts[key] = new Array();
+            admin_alerts[key].ans = andVal;
+            admin_alerts[key].patient = $cookies.get('user_id');
+            admin_alerts[key].questionnaire = $scope.questionnaire;
+            admin_alerts[key].datetime = $scope.notification.datetime;
+            admin_alerts[key].clinic = $scope.notification.clinic;
+          }
+        }
+      }
+      /* End of to store admin alerts */
+
+      var postData = {};
       postData.patient          = $cookies.get('user_id');
       postData.notification_id  = $stateParams.id;
       postData.questionnaire    = $scope.questionnaire;
       postData.quesData         = $scope.quesData;
       postData.ansData          = $scope.ansData;
+      
       var request = {
         method: 'POST',
         url: $rootScope.appUrl+'/front_patient/saveans',
@@ -397,16 +342,15 @@ angular.module('starter.controllers', [])
       };
       $http(request).then(function(response){
         if(response.data.success){
-          // $scope.error_message = 'Questions Saved Successfully.';
-          Flash.create('success', 'Questions Saved Successfully.', 'alert alert-success');
+          $scope.error_message = 'Answers has been saved successfully.';
+          Flash.create('success', $scope.error_message, 'alert alert-success');
           $state.go('app.questionnaire');
-        }else{
+        } else {
           $scope.error_message = response.data.message;
         }
-      })
+      });
     }
     if(flag=='questions'){
       $scope.questions();
     }
-  })
-  ;
+  });
