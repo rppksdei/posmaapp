@@ -347,13 +347,16 @@ angular.module('starter.controllers', [])
       if(typeof $rootScope.appUrl === 'undefined'){
         $rootScope.appUrl = localStorage.getItem("apiurl");
       }
-      var postData = {}; 
+      var postData = {};
       postData.patient          = $cookies.get('user_id');
       postData.notification_id  = $stateParams.id;
       postData.questionnaire    = $scope.questionnaire;
       postData.quesData         = $scope.quesData;
       postData.ansData          = $scope.ansData;
-      var request = {
+      console.log($scope.quesData);
+      console.log($scope.ansData);
+      console.log('postData = ',postData);
+      /*var request = {
         method: 'POST',
         url: $rootScope.appUrl+'/front_patient/saveans',
         headers: {
@@ -366,10 +369,10 @@ angular.module('starter.controllers', [])
           // $scope.error_message = 'Questions Saved Successfully.';
           Flash.create('success', 'Questions Saved Successfully.', 'alert alert-success');
           $state.go('app.questionnaire');
-        }else{
+        } else {
           $scope.error_message = response.data.message;
         }
-      })
+      })*/
     }
     if(flag=='questions'){
       $scope.questions();
