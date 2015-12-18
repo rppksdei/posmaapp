@@ -136,7 +136,7 @@ angular.module('starter.controllers', [])
     }
   })
 
-  .controller('NotificationCtrl', function($state,$scope,$http,$q,$cookies,$rootScope,$ionicPopup, $timeout,moment) {
+  .controller('NotificationCtrl', function($state,$scope,$http,$q,$cookies,$rootScope,$ionicPopup, $timeout,moment,$ionicModal) {
     if(typeof $rootScope.appUrl === 'undefined'){
       $rootScope.appUrl = localStorage.getItem("apiurl");
     }
@@ -145,6 +145,17 @@ angular.module('starter.controllers', [])
       flag = $state.current.flag;
     }
     
+    $ionicModal.fromTemplateUrl('templates/changepassword.html', {
+      scope: $scope
+    }).then(function(modal) {
+      $scope.modal = modal;
+    });
+    
+    // Triggered in the login modal to close it
+    $scope.closeLogin = function() {
+        $scope.modal.hide();
+    };
+  
     $scope.changePassword = function(){
         if(typeof $rootScope.appUrl === 'undefined'){
           $rootScope.appUrl = localStorage.getItem("apiurl");
@@ -153,9 +164,11 @@ angular.module('starter.controllers', [])
         postData.patient   = $cookies.get('user_id');
         postData.password  = $cookies.get('password');
         
+        $scope.modal.show();
+      /*
         // An elaborate, custom popup
           var myPopup = $ionicPopup.show({
-            template: "<div class='col'><div class='list'><label class='item item-input'><input type='password' name='oldpassword' value='' ng-model='cpData.oldpassword' placeholder='Old Password' ngMinlength=6 /></label></div><div class='list'><label class='item item-input'><input type='password' name='newpassword' value='' placeholder='New Password' ng-model='cpData.newpassword' /></label></div><div class='list'><label class='item item-input'><input type='password' name='confirmpassword' value='' ng-model='cpData.confirmpassword' placeholder='Confirm Password' /></label></div></div>",
+            template: "<div class='col'><div class='list'><label class='item item-input'><input type='password' name='oldpassword' value='' ng-model='cpData.oldpassword' placeholder='Old Password' ngMinlength=4 /></label></div><div class='list'><label class='item item-input'><input type='password' name='newpassword' value='' placeholder='New Password' ng-model='cpData.newpassword' /></label></div><div class='list'><label class='item item-input'><input type='password' name='confirmpassword' value='' ng-model='cpData.confirmpassword' placeholder='Confirm Password' /></label></div></div>",
             title: 'Change Password',
             scope: $scope,
             buttons: [
@@ -164,18 +177,6 @@ angular.module('starter.controllers', [])
                 text: 'Save',
                 type: 'button button-dark button-small',
                 onTap: function(e) {
-                  //if(!$scope.cpData.oldpassword) {
-                  //  //don't allow the user to close unless he enters wifi password
-                  //  e.preventDefault();
-                  //  alert('Old password is required');
-                  //}else if(!$scope.cpData.newpassword) {
-                  //  e.preventDefault();
-                  //  alert('New password is required');
-                  //}else if(!$scope.cpData.confirmpassword) {
-                  //  e.preventDefault();
-                  //  alert('Confirm password is required');
-                  //}
-                  //else{
                   if($scope.cpData.oldpassword && $scope.cpData.newpassword && $scope.cpData.confirmpassword) {
                     alert(1); return;
                       postData._id = $cookies.get('user_id');
@@ -200,7 +201,6 @@ angular.module('starter.controllers', [])
                   }else{
                     alert(0); return;
                   }
-                  //}
                 }
               }
             ]
@@ -208,6 +208,7 @@ angular.module('starter.controllers', [])
           myPopup.then(function(res) {
             console.log('Tapped!', res);
           });
+        */
           //$timeout(function() {
           //   myPopup.close(); //close the popup after 3 seconds for some reason
           //}, 3000);
