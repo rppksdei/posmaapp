@@ -254,7 +254,6 @@ angular.module('starter.controllers', [])
                 $scope.questionnaires[i].ntime   = moment.unix(response.data[i].datetime).format('HH:mm');
                 $scope.questionnaires[i].ndate   = moment.unix(response.data[i].datetime).format('MM/DD/YYYY');
           }
-          console.log($scope.questionnaires);
         } else{
           $scope.error_message = response.data.message;
         }
@@ -276,6 +275,8 @@ angular.module('starter.controllers', [])
     }
     var postData = {};
     $scope.questions = function(){
+      $scope.quesData = {};
+      $scope.ansData = {};
       var DEFAULT_PAGE_SIZE_STEP = 3;
       $scope.currentPage = 1;
       $scope.pageSize = $scope.currentPage * DEFAULT_PAGE_SIZE_STEP; 
@@ -288,25 +289,50 @@ angular.module('starter.controllers', [])
       postData.questionnaire = $stateParams.id;
       postData.patient_id = $cookies.get('user_id');
       postData.is_filled = 0;
-      var request = {
-        method: 'POST',
-        data: 'pId=' + postData.patient_id + '&isFilled=' + postData.is_filled + '&_id=' + postData.questionnaire,
-        url: $rootScope.appUrl+'/questionnaire/getList',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      };
-      $http(request).then(function(response){
-        if (!response.data.error) {
-          $scope.questionnaires = response.data;
-        } else{
-          $scope.error_message = response.data.message;
-        }
-      })
+
+      var notification_id = $stateParams.id;
+        $scope.notification_id = notification_id;
+        $scope.notification = {};
+        var request = {
+          method: 'POST',
+          url: $rootScope.appUrl+'/notification/getQuestionnaire',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          data: '_id=' + notification_id
+        };
+        $http(request).then(function(res){
+          if(res.data.questionnaire){
+            postData.questionnaire = res.data.questionnaire._id;
+            $scope.notification.clinic = res.data.questionnaire.clinic;
+            $scope.notification.datetime = res.data.created;
+            postData.patient_id = $cookies.get('user_id');
+            postData.is_filled = 0;
+            $scope.questionnaire = postData.questionnaire;
+            var request = {
+              method: 'POST',
+              data: 'pId=' + postData.patient_id + '&isFilled=' + postData.is_filled + '&_id=' + postData.questionnaire,
+              url: $rootScope.appUrl+'/questionnaire/getList',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              }
+            };
+            $http(request).then(function(response){
+              if (!response.data.error) {
+                $scope.questionnaires = response.data;
+              } else{
+                $scope.error_message = response.data.message;
+              }
+            })
+            // $state.go('app.questionnaire');
+          }else{
+            $scope.error_message = 'Notification Unavailable.';
+          }
+        })
     }
-    var notification_id = $stateParams.id;
+    /* var notification_id = $stateParams.id;
     $scope.notification_id = notification_id;
-    /* get questionid fron notification_id */
+    
     var request = {
       method: 'POST',
       url: $rootScope.appUrl+'/notification/getQuestionnaire',
@@ -340,23 +366,43 @@ angular.module('starter.controllers', [])
       }else{
         $scope.error_message = 'Notification Unavailable.';
       }
-    })
-    $scope.quesData = {}; $scope.ansData = {};
+    })*/
+    
     $scope.ques_save = function(){
       //$rootScope.appUrl = 'http://localhost:8987';
       if(typeof $rootScope.appUrl === 'undefined'){
         $rootScope.appUrl = localStorage.getItem("apiurl");
       }
+      var admin_alerts = {};
+      /* To store admin alerts */
+      if(typeof $scope.quesData != 'undefined'){
+        for(key in $scope.quesData){
+          var ansValArr = new Array();
+          var andVal = '';
+          ansValArr = $scope.quesData[key].split('-');
+          andVal = ansValArr[0];
+          andVal = ansValArr[1];
+          $scope.quesData[key] = andVal;
+          if(andVal == 'true'){
+            admin_alerts[key] = new Array();
+            admin_alerts[key].ans = andVal;
+            admin_alerts[key].patient = $cookies.get('user_id');
+            admin_alerts[key].questionnaire = $scope.questionnaire;
+            admin_alerts[key].datetime = $scope.notification.datetime;
+            admin_alerts[key].clinic = $scope.notification.clinic;
+          }
+        }
+      }
+      /* End of to store admin alerts */
+
       var postData = {};
       postData.patient          = $cookies.get('user_id');
       postData.notification_id  = $stateParams.id;
       postData.questionnaire    = $scope.questionnaire;
       postData.quesData         = $scope.quesData;
       postData.ansData          = $scope.ansData;
-      console.log($scope.quesData);
-      console.log($scope.ansData);
-      console.log('postData = ',postData);
-      /*var request = {
+      
+      var request = {
         method: 'POST',
         url: $rootScope.appUrl+'/front_patient/saveans',
         headers: {
@@ -366,16 +412,15 @@ angular.module('starter.controllers', [])
       };
       $http(request).then(function(response){
         if(response.data.success){
-          // $scope.error_message = 'Questions Saved Successfully.';
-          Flash.create('success', 'Questions Saved Successfully.', 'alert alert-success');
+          $scope.error_message = 'Answers has been saved successfully.';
+          Flash.create('success', $scope.error_message, 'alert alert-success');
           $state.go('app.questionnaire');
         } else {
           $scope.error_message = response.data.message;
         }
-      })*/
+      });
     }
     if(flag=='questions'){
       $scope.questions();
     }
-  })
-  ;
+  });
