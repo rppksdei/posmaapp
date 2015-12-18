@@ -163,76 +163,7 @@ angular.module('starter.controllers', [])
         var postData = {}; $scope.cpData = {};
         postData.patient   = $cookies.get('user_id');
         postData.password  = $cookies.get('password');
-        
         $scope.modal.show();
-      /*
-        // An elaborate, custom popup
-          var myPopup = $ionicPopup.show({
-            template: "<div class='col'><div class='list'><label class='item item-input'><input type='password' name='oldpassword' value='' ng-model='cpData.oldpassword' placeholder='Old Password' ngMinlength=4 /></label></div><div class='list'><label class='item item-input'><input type='password' name='newpassword' value='' placeholder='New Password' ng-model='cpData.newpassword' /></label></div><div class='list'><label class='item item-input'><input type='password' name='confirmpassword' value='' ng-model='cpData.confirmpassword' placeholder='Confirm Password' /></label></div></div>",
-            title: 'Change Password',
-            scope: $scope,
-            buttons: [
-              { text: 'Cancel',type: 'button-small' },
-              {
-                text: 'Save',
-                type: 'button button-dark button-small',
-                onTap: function(e) {
-                  if($scope.cpData.oldpassword && $scope.cpData.newpassword && $scope.cpData.confirmpassword) {
-                    alert(1); return;
-                      postData._id = $cookies.get('user_id');
-                      postData.password = $scope.cpData.newpassword;
-
-                      var request = {
-                        method: 'POST',
-                        data: '_id=' + postData._id + '&password=' + postData.password,
-                        url: $rootScope.appUrl+'/patient/updatepassword',
-                        headers: {
-                          'Content-Type': 'application/x-www-form-urlencoded'
-                        }
-                      };
-                      $http(request).then(function(response){
-                        console.log('response = ',response.data);
-                        //if (!response.data.error) {
-                        //  $scope.questionnaires = response.data;
-                        //} else{
-                        //  $scope.error_message = response.data.message;
-                        //}
-                      })
-                  }else{
-                    alert(0); return;
-                  }
-                }
-              }
-            ]
-          });
-          myPopup.then(function(res) {
-            console.log('Tapped!', res);
-          });
-        */
-          //$timeout(function() {
-          //   myPopup.close(); //close the popup after 3 seconds for some reason
-          //}, 3000);
-        
-        /*
-        var request = {
-          method: 'POST',
-          url: $rootScope.appUrl+'/front_patient/saveans',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          data: 'postData=' + JSON.stringify(postData)
-        };
-        $http(request).then(function(response){
-          // console.log(response.data);
-          if(response.data.success){
-            // $scope.error_message = 'Questions Saved Successfully.';
-            Flash.create('success', 'Questions Saved Successfully.', 'alert alert-success');
-            $state.go('app.questionnaire');
-          }else{
-            $scope.error_message = response.data.message;
-          }
-        })
-        */
     }
     
     $scope.notifications = function(){
@@ -330,43 +261,6 @@ angular.module('starter.controllers', [])
           }
         })
     }
-    /* var notification_id = $stateParams.id;
-    $scope.notification_id = notification_id;
-    
-    var request = {
-      method: 'POST',
-      url: $rootScope.appUrl+'/notification/getQuestionnaire',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      data: '_id=' + notification_id
-    };
-    $http(request).then(function(res){
-      if(res.data.questionnaire){
-        postData.questionnaire = res.data.questionnaire;
-        postData.patient_id = $cookies.get('user_id');
-        postData.is_filled = 0;
-        $scope.questionnaire = postData.questionnaire;
-        var request = {
-          method: 'POST',
-          data: 'pId=' + postData.patient_id + '&isFilled=' + postData.is_filled + '&_id=' + postData.questionnaire,
-          url: $rootScope.appUrl+'/questionnaire/getList',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        };
-        $http(request).then(function(response){
-          if (!response.data.error) {
-            $scope.questionnaires = response.data;
-          } else{
-            $scope.error_message = response.data.message;
-          }
-        })
-        // $state.go('app.questionnaire');
-      }else{
-        $scope.error_message = 'Notification Unavailable.';
-      }
-    })*/
     
     $scope.ques_save = function(){
       //$rootScope.appUrl = 'http://localhost:8987';
