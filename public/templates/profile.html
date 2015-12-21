@@ -1,33 +1,49 @@
 <ion-view view-title="Update Profile">
 	<ion-content>
-		<div flash-message="5000" ></div>
+		<div flash-message="5000"></div>
 		<form name="patientForm" id="patientForm" ng-submit="savePatient();" novalidate="">
 			<ion-list class="questionnaire">
 				<ion-item class="item item-divider border-top wrpnrml">
 					<div class="row padding-non">
-						<div class="col padding-non">First Name</div>
-						<div class="col col-80 padding-non">
-							<input placeholder="Frist Name" type="text" name="first_name" id="first_name" required value="" ng-model="patientData.first_name" class="fullwidth"/>
+						<div class="col padding-non">
+							<label class="padding7">First Name</label>
+						</div>
+						<div class="col col-70 padding-non" ng-class="{'has-error':patientForm.first_name.$dirty && (patientForm.first_name.$error.required || errordetail.first_name)}">
+							<input placeholder="First Name" type="text" name="first_name" id="first_name" required value="" ng-model="patientData.first_name" class="fullwidth"/>
 						</div>
 					</div>
-					<div class="row margintop padding-non">
-					  <div class="col padding-non"> </div>
-					  <div class="col  col-80 padding-non fullwidth error-label" ng-show="patientForm.first_name.$dirty && (patientForm.first_name.$error.required || errordetail.first_name)">First name is required.</div>
+					<div class="row margintop padding-non" ng-show="patientForm.first_name.$dirty && (patientForm.first_name.$error.required || errordetail.first_name)">
+						<div class="col padding-non"> </div>
+						<div class="col  col-70 padding-non fullwidth error-label">First name is required.</div>
 					</div>
-
-				</ion-item>
-
-				<ion-item class="item item-divider border-top wrpnrml">
-					<label class="item-input">
-						<span class="input-label">Last Name</span>
-						<input placeholder="Last Name" type="text" name="lastname" value="" ng-model="patientData.last_name" class="left-padding"/>
-					</label>
 				</ion-item>
 				<ion-item class="item item-divider border-top wrpnrml">
-					<label class="item-input">
-						<span class="input-label">Email</span>
-						<input placeholder="Email" type="email" name="email" value="" ng-model="patientData.email" class="left-padding"/>
-					</label>
+					<div class="row padding-non">
+						<div class="col padding-non">
+							<label class="padding7">Last Name</label>
+						</div>
+						<div class="col col-70 padding-non" ng-class="{'has-error':patientForm.last_name.$dirty && (patientForm.last_name.$error.required || errordetail.last_name)}">
+							<input placeholder="Last Name" type="text" name="last_name" id="last_name" required value="" ng-model="patientData.last_name" class="fullwidth"/>
+						</div>
+					</div>
+					<div class="row margintop padding-non" ng-show="patientForm.last_name.$dirty && (patientForm.last_name.$error.required || errordetail.last_name)">
+					  <div class="col padding-non"> </div>
+					  <div class="col  col-70 padding-non fullwidth error-label">Last name is required.</div>
+					</div>
+				</ion-item>
+				<ion-item class="item item-divider border-top wrpnrml">
+					<div class="row padding-non">
+						<div class="col padding-non">
+							<label class="padding7">Email</label>
+						</div>
+						<div class="col col-70 padding-non" ng-class="{'has-error':patientForm.email.$dirty && (patientForm.email.$error.required || errordetail.email)}">
+							<input placeholder="Email" type="email" name="email" id="email" required value="" ng-model="patientData.email" class="fullwidth"/>
+						</div>
+					</div>
+					<div class="row margintop padding-non" ng-show="patientForm.email.$dirty && (patientForm.email.$error.required || errordetail.email)">
+					  <div class="col padding-non"> </div>
+					  <div class="col  col-70 padding-non fullwidth error-label">Email is required.</div>
+					</div>
 				</ion-item>
 				<!--ion-item class="item item-divider border-top wrpnrml">
 					<label class="item-input">
@@ -41,50 +57,106 @@
 					</label>
 				</ion-item-->
 				<ion-item class="item item-divider border-top wrpnrml">
-					<label class="item-input item-select prf-gender">
+					<div class="row padding-non">
+						<div class="col padding-non">
+							<label class="padding7">Gender</label>
+						</div>
+						<div class="col col-70 padding-non">
+							<select ng-model="patientData.gender">
+								<option value="M">Male</option>
+								<option value="F">Female</option>
+							</select>
+							<!--input placeholder="Gender" type="email" name="email" id="email" required value="" ng-model="patientData.email" class="fullwidth"/-->
+						</div>
+					</div>
+					<div class="row margintop padding-non" ng-show="patientForm.gender.$dirty && (patientForm.gender.$error.required || errordetail.gender)">
+					  <div class="col padding-non"> </div>
+					  <div class="col  col-70 padding-non fullwidth error-label">Gender is required.</div>
+					</div>
+
+					<!--label class="item-input item-select prf-gender">
 						<span class="input-label">Gender</span>
-						<!--input placeholder="Gender" type="text" name="gender" ng-model="patientData.gender" class="left-padding"/-->
 						<select class="input-label left-padding" ng-model="patientData.gender">
 							<option value="">-Select Gender-</option>
 							<option value="F">Female</option>
 							<option value="M">Male</option>
 						</select>
-					</label>
+					</label-->
 				</ion-item>
 				<ion-item class="item item-divider border-top wrpnrml">
-					<label class="item-input">
-						<span class="input-label">Height</span>
-						<input placeholder="Height" type="text" ng-change="getBMI()" name="height" ng-model="patientData.height" class="left-padding"/>
-					</label>
+					<div class="row padding-non">
+						<div class="col padding-non">
+							<label class="padding7">Height</label>
+						</div>
+						<div class="col col-70 padding-non" ng-class="{'has-error':patientForm.height.$dirty && (patientForm.height.$error.required || errordetail.height)}">
+							<input placeholder="Height" type="text" ng-change="getBMI()" name="height" id="height" required value="" ng-model="patientData.height" class="fullwidth"/>
+						</div>
+					</div>
+					<div class="row margintop padding-non" ng-show="patientForm.height.$dirty && (patientForm.height.$error.required || errordetail.height)">
+					  <div class="col padding-non"> </div>
+					  <div class="col  col-70 padding-non fullwidth error-label">Height is required.</div>
+					</div>
 				</ion-item>
 				<ion-item class="item item-divider border-top wrpnrml">
-					<label class="item-input">
-						<span class="input-label">Weight</span>
-						<input placeholder="Weight" type="text" ng-change="getBMI()" name="weight" ng-model="patientData.weight" class="left-padding"/>
-					</label>
+					<div class="row padding-non">
+						<div class="col padding-non">
+							<label class="padding7">Weight</label>
+						</div>
+						<div class="col col-70 padding-non" ng-class="{'has-error':patientForm.weight.$dirty && (patientForm.weight.$error.required || errordetail.weight)}">
+							<input placeholder="Weight" type="text" ng-change="getBMI()" name="weight" id="weight" required value="" ng-model="patientData.weight" class="fullwidth"/>
+						</div>
+					</div>
+					<div class="row margintop padding-non" ng-show="patientForm.weight.$dirty && (patientForm.weight.$error.required || errordetail.weight)">
+					  <div class="col padding-non"> </div>
+					  <div class="col  col-70 padding-non fullwidth error-label">Weight is required.</div>
+					</div>
 				</ion-item>
 				<ion-item class="item item-divider border-top wrpnrml">
-					<label class="item-input">
-						<span class="input-label">BMI</span>
-						<input placeholder="BMI" type="text" name="bmi" ng-model="patientData.bmi" class="left-padding" ng-disabled="true"/>
-					</label>
+					<div class="row padding-non">
+						<div class="col padding-non">
+							<label class="padding7">BMI</label>
+						</div>
+						<div class="col col-70 padding-non" ng-class="{'has-error':patientForm.bmi.$dirty && (patientForm.bmi.$error.required || errordetail.bmi)}">
+							<input placeholder="BMI" type="text" name="bmi" id="bmi" required value="" ng-model="patientData.bmi" class="fullwidth" ng-disabled="true"/>
+						</div>	
+					</div>
+					<div class="row margintop padding-non" ng-show="patientForm.bmi.$dirty && (patientForm.bmi.$error.required || errordetail.bmi)">
+					  <div class="col padding-non"> </div>
+					  <div class="col  col-70 padding-non fullwidth error-label">BMI is required.</div>
+					</div>
 				</ion-item>
 				<ion-item class="item item-divider border-top wrpnrml">
-					<label class="item-input">
-						<span class="input-label">Mobile</span>
-						<input placeholder="Mobile Numebr" type="text" name="mobile" value="" ng-model="patientData.mobile" class="left-padding"/>
-					</label>
+					<div class="row padding-non">
+						<div class="col padding-non">
+							<label class="padding7">Mobile</label>
+						</div>
+						<div class="col col-70 padding-non" ng-class="{'has-error':patientForm.mobile.$dirty && (patientForm.mobile.$error.required || errordetail.mobile)}">
+							<input placeholder="Mobile" type="text" name="mobile" id="mobile" required value="" ng-model="patientData.mobile" class="fullwidth"/>
+						</div>	
+					</div>
+					<div class="row margintop padding-non" ng-show="patientForm.mobile.$dirty && (patientForm.mobile.$error.required || errordetail.mobile)">
+					  <div class="col padding-non"> </div>
+					  <div class="col  col-70 padding-non fullwidth error-label">Mobile is required.</div>
+					</div>
 				</ion-item>
 				<ion-item class="item item-divider border-top wrpnrml">
-					<label class="item-input">
-						<span class="input-label">Address</span>
-						<input placeholder="Address" type="text" name="address" value="" ng-model="patientData.address1" class="left-padding"/>
-					</label>
+					<div class="row padding-non">
+						<div class="col padding-non">
+							<label class="padding7">Address</label>
+						</div>
+						<div class="col col-70 padding-non" ng-class="{'has-error':patientForm.address.$dirty && (patientForm.address.$error.required || errordetail.address)}">
+							<input placeholder="Address" type="text" name="address" id="address" value="" ng-model="patientData.address" required class="fullwidth"/>
+						</div>	
+					</div>
+					<div class="row margintop padding-non" ng-show="patientForm.address.$dirty && (patientForm.address.$error.required || errordetail.address)">
+					  <div class="col padding-non"> </div>
+					  <div class="col  col-70 padding-non fullwidth error-label">Address is required.</div>
+					</div>
 				</ion-item>
-				<button type="submit" class="button button-block button-dark">
+				<button type="submit" class="button button-block ng-disabled="loginForm.$invalid" button-dark">
 					Update
 				</button>
 			</ion-list>
 		</form>
 	</ion-content>
-</ion-view>
+</ion-view>x
