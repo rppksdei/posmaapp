@@ -161,7 +161,7 @@ angular.module('starter.controllers', [])
         if(typeof $rootScope.appUrl === 'undefined'){
           $rootScope.appUrl = localStorage.getItem("apiurl");
         }
-        //var postData = {};
+        var postData = {};
         $scope.old_pwd = '';
         postData.patient   = $cookies.get('user_id');
         postData.password  = $cookies.get('password');
