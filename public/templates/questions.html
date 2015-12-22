@@ -1,21 +1,24 @@
+<style type="text/css">
+.item-select select{
+	border: 1px solid;
+    direction: ltr;
+    max-width: 100%;
+    padding: 7px 10px 7px 0;
+    position: relative;
+    width: 100%;
+ }
+ </style>
 <ion-view view-title="{{questionnaires.name}}">
 	<ion-content>
 		Total Questions: {{questionnaires.question.length}} 
-		<form name="quesForm" id="quesForm" ng-submit="ques_save();" novalidate="">
+		<form name="quesForm" id="quesForm">
 			<ion-list class="questionnaire">
-				<!--div ng-repeat="ques in questionnaires.question">
-					Q: {{ques.name}}
-					<div class="col">
-						<input type="radio" name="answerModel[ques._id]" ng-model="ques[ans._id]">Yes {{answerModel[ques._id]}}
-						<input type="radio" name="answerModel[ques._id]" ng-model="ques[ans._id]">No
-						
-					</div>
-				</div-->
 				<input type="hidden" ng-model ="notification.datetime" />
 				<input type="hidden" ng-model ="notification.clinic" />
 				<ion-item class="item item-divider border-top wrpnrml" ng-repeat="ques in questionnaires.question | limitTo:pageSize">
 					Q: {{ques.name}}
-
+					<input type="hidden" ng-model="quesType[ques._id]"/>
+					<!-- <input type="text" name="typeqq_{{ques._id}}" id="typeqq_{{ques._id}}" ng-value="ques.answer_type" ng-model="quesType[ques._id]"> -->
 					<div class="row" ng-if='ques.answer_type=="rb"'>
 						<div class="col">
 							<ion-list ng-if='ques.answer' class="list">
@@ -38,11 +41,8 @@
 					<div class="row" ng-if='ques.answer_type=="dd"'>
 						<div class="col">
 							<label ng-if='ques.answer' class="item item-input item-select">
-								<div class="input-label">
-								    Lightsaber
-								</div>
 								<select class="input-label" ng-model="quesData[ques._id]">
-									<option ng-repeat="ans in ques.answer">{{ans.name}} {{ans._id}} {{ans.out_of_range}}</option>
+									<option ng-repeat="ans in ques.answer" value="ans._id+'-'+ans.out_of_range">{{ans.name}}</option>
 								</select>
 							</label>
 						</div>
@@ -59,8 +59,7 @@
 
 					<div ng-if='ques.answer_type=="cb"' class="row responsive-sm">
 						<div class="col" ng-repeat="ans2 in ques.answer">
-								<input type="checkbox" value="{{ans2._id}}" ng-model ="ansData[ques._id][ans2._id]" />
-							{{ans2.name}}
+								<input type="checkbox" text="" value="{{ans2._id}}+'-'+{{ans2.out_of_range}}" ng-model ="ansData[ques._id][ans2._id]" />
 						</div>
 					</div>
 				</ion-item>
@@ -70,10 +69,10 @@
 					</button> -->
 					
 				<!-- </ion-item> -->
-				<button class="button button-block button-dark" ng-if="pageSize < questionnaires.question.length" ng-click="loadNextPage()">
+				<button type="button" class="button button-block button-dark" ng-if="pageSize < questionnaires.question.length" ng-click="loadNextPage()">
 					Show More
 				</button>
-				<button type="submit" class="button button-block button-dark" ng-if="pageSize >= questionnaires.question.length">
+				<button ng-click="ques_save();" type="submit" class="button button-block button-dark" ng-if="pageSize >= questionnaires.question.length">
 					Save
 				</button>
 			</ion-list>

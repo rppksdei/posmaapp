@@ -145,7 +145,7 @@
 							<label class="padding7">Address</label>
 						</div>
 						<div class="col col-70 padding-non" ng-class="{'has-error':patientForm.address.$dirty && (patientForm.address.$error.required || errordetail.address)}">
-							<input placeholder="Address" type="text" name="address" id="address" value="" ng-model="patientData.address" required class="fullwidth"/>
+							<input placeholder="Address" type="text" name="address" id="address" value="" ng-model="patientData.address" class="fullwidth"/>
 						</div>	
 					</div>
 					<div class="row margintop padding-non" ng-show="patientForm.address.$dirty && (patientForm.address.$error.required || errordetail.address)">
@@ -153,7 +153,7 @@
 					  <div class="col  col-70 padding-non fullwidth error-label">Address is required.</div>
 					</div>
 				</ion-item>
-				<button type="submit" class="button button-block ng-disabled="loginForm.$invalid" button-dark">
+				<button class="button button-block button-dark" ng-disabled="patientForm.$invalid" type="submit">
 					Update
 				</button>
 			</ion-list>
