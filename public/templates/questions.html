@@ -59,16 +59,13 @@
 
 					<div ng-if='ques.answer_type=="cb"' class="row responsive-sm">
 						<div class="col" ng-repeat="ans2 in ques.answer">
-								<input type="checkbox" text="" value="{{ans2._id}}+'-'+{{ans2.out_of_range}}" ng-model ="ansData[ques._id][ans2._id]" />
+								<input type="checkbox" ng-model ="ansData[ques._id][ans2._id][ans2.out_of_range]" /> {{ans2.name}}
 						</div>
 					</div>
+
+
 				</ion-item>
-				<!-- <ion-item class="item"> -->
-					<!-- <button class="button button-block button-positive">
-					  Block Button
-					</button> -->
-					
-				<!-- </ion-item> -->
+		        
 				<button type="button" class="button button-block button-dark" ng-if="pageSize < questionnaires.question.length" ng-click="loadNextPage()">
 					Show More
 				</button>

@@ -135,7 +135,6 @@ angular.module('starter.controllers', [])
       $scope.getDetails();
     }
   })
-
   .controller('NotificationCtrl', function($state,$scope,$http,$q,$cookies,$rootScope,$ionicPopup, $timeout,moment,$ionicModal) {
     if(typeof $rootScope.appUrl === 'undefined'){
       $rootScope.appUrl = localStorage.getItem("apiurl");
@@ -182,8 +181,8 @@ angular.module('starter.controllers', [])
         if (!response.data.error) {
           $scope.questionnaires = response.data;
           for (var i = 0; i < response.data.length; i++) {
-                $scope.questionnaires[i].ntime   = moment.unix(response.data[i].datetime).format('HH:mm');
-                $scope.questionnaires[i].ndate   = moment.unix(response.data[i].datetime).format('MM/DD/YYYY');
+            $scope.questionnaires[i].ntime   = moment.unix(response.data[i].datetime).format('HH:mm');
+            $scope.questionnaires[i].ndate   = moment.unix(response.data[i].datetime).format('MM/DD/YYYY');
           }
         } else{
           $scope.error_message = response.data.message;
@@ -209,15 +208,16 @@ angular.module('starter.controllers', [])
     $scope.currentPage = 1;
     $scope.pageSize = $scope.currentPage * DEFAULT_PAGE_SIZE_STEP; 
     $scope.answerModel = {};
-
     $scope.questions = function(){
       $scope.quesData = {};
       $scope.ansData = {};
       $scope.quesType = {};
       var postData = {};
-      postData.questionnaire = $stateParams.id;
-      postData.patient_id = $cookies.get('user_id');
-      postData.is_filled = 0;
+      $scope.tesd = {};
+
+      // postData.questionnaire = $stateParams.id;
+      // postData.patient_id = $cookies.get('user_id');
+      // postData.is_filled = 0;
 
       var notification_id = $stateParams.id;
         $scope.notification_id = notification_id;
@@ -267,25 +267,30 @@ angular.module('starter.controllers', [])
       $scope.currentPage++;
       $scope.pageSize = $scope.currentPage * DEFAULT_PAGE_SIZE_STEP;
     }
-
     $scope.ques_save = function(){
       if(typeof $rootScope.appUrl === 'undefined'){
         $rootScope.appUrl = localStorage.getItem("apiurl");
       }
       var admin_alerts = {};
+      var admin_alerts_cb = {};
+      var quesDataNew = {};
       /* To store admin alerts */
       if(typeof $scope.quesData != 'undefined') {
         for(key in $scope.quesData){
           var ansValArr = new Array();
-          var andVal = '';
+          quesDataNew[key] = {};
+          var ansVal = '';
+          var ansId = '';
           if($scope.quesType[key] == 'rb' || $scope.quesType[key] == 'dd'){
             ansValArr = $scope.quesData[key].split('-');
-            andVal = ansValArr[0];
-            andVal = ansValArr[1];
-            $scope.quesData[key] = andVal;
-            if(andVal == 'true'){
-              admin_alerts[key] = new Array();
-              admin_alerts[key].ans = andVal;
+            //console.log(ansValArr);
+            ansId = ansValArr[0];
+            ansVal = ansValArr[1];
+            quesDataNew[key] = ansId;
+            if(ansVal == 'true'){
+              admin_alerts[key] = {};
+              admin_alerts[key].question = key;
+              admin_alerts[key].ans = ansId;
               admin_alerts[key].anstype = $scope.quesType[key];
               admin_alerts[key].patient = $cookies.get('user_id');
               admin_alerts[key].questionnaire = $scope.questionnaire;
@@ -294,42 +299,60 @@ angular.module('starter.controllers', [])
             }
           }
         }
-      } 
+      }
+      
+      var anssData = {};
       if(typeof $scope.ansData != 'undefined') {
-        //ansValArr = $scope.quesData[key].split('-');
-        //andVal = ansValArr[0];
-        //andVal = ansValArr[1];
-        //$scope.quesData[key] = andVal;
-        //if(andVal == 'true'){
-          console.log($scope.ansData);
-          /*admin_alerts[key] = new Array();
-          admin_alerts[key].ans = andVal;
-          admin_alerts[key].patient = $cookies.get('user_id');
-          admin_alerts[key].questionnaire = $scope.questionnaire;
-          admin_alerts[key].datetime = $scope.notification.datetime;
-          admin_alerts[key].clinic = $scope.notification.clinic;*/
-        //}
+        for(quest in $scope.ansData){
+          anssData[quest] = {};
+          admin_alerts[quest] = {};
+          var ansArr = new Array();
+          var ans_cnt = 0;
+          for(ansopt in $scope.ansData[quest]){
+            for(ans_out in $scope.ansData[quest][ansopt]){
+              if($scope.ansData[quest][ansopt][ans_out] == true){
+                if(ans_out == true || ans_out == 'true'){
+                  ansArr[ans_cnt] = ansopt;
+                  //admin_alerts[quest].ans = ansopt;
+                  ans_cnt++;
+                }
+                anssData[quest][ansopt] = $scope.ansData[quest][ansopt][ans_out];
+              }
+            }
+          }
+          admin_alerts[quest].question = quest;
+          admin_alerts[quest].multians = ansArr;
+          admin_alerts[quest].anstype = $scope.quesType[quest];
+          admin_alerts[quest].patient = $cookies.get('user_id');
+          admin_alerts[quest].questionnaire = $scope.questionnaire;
+          admin_alerts[quest].datetime = $scope.notification.datetime;
+          admin_alerts[quest].clinic = $scope.notification.clinic;
+        }
       }
 
-     // console.log(admin_alerts);
-
-
+      console.log(admin_alerts);
       /* End of to store admin alerts */
 
       var postData = {};
       postData.patient          = $cookies.get('user_id');
       postData.notification_id  = $stateParams.id;
       postData.questionnaire    = $scope.questionnaire;
-      postData.quesData         = $scope.quesData;
-      postData.ansData          = $scope.ansData;
+      //postData.quesData         = $scope.quesData;
+      postData.quesData         = quesDataNew;
+      //postData.ansData          = $scope.ansData;
+      postData.ansData          = anssData;
       
+      var postfullData = {};
+      postfullData.postData = postData;
+      postfullData.admin_alerts = admin_alerts;
+
       var request = {
         method: 'POST',
         url: $rootScope.appUrl+'/front_patient/saveans',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
-        data: 'postData=' + JSON.stringify(postData)
+        data: 'postFullData=' + JSON.stringify(postfullData)
       };
       $http(request).then(function(response){
         if(response.data.success){
