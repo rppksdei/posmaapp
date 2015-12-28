@@ -234,11 +234,9 @@ angular.module('starter.controllers', [])
       $scope.notifications();
     }
   })
-<<<<<<< HEAD
-  .controller('QuestionsCtrl', function($scope,$stateParams,$http,$q,$state,$cookies,$rootScope, Flash){
-=======
+
   .controller('QuestionsCtrl', function($scope,$stateParams,$http,$state,$cookies,$rootScope, Flash) {
->>>>>>> 4efc3271ab5cf02a9cddb6839137891124f1ec95
+
     var flag = false;
     if (typeof $state.current.flag !== 'undefined') {
       flag = $state.current.flag;
