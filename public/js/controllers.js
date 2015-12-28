@@ -50,9 +50,12 @@ angular.module('starter.controllers', [])
           //if ($scope.remember === true){
             var expireDate = new Date();
             expireDate.setDate(expireDate.getDate() + 30);
-            $cookies.put('user_id', response.data.user_id, {'expires': expireDate});
-            $cookies.put('password', response.data.password, {'expires': expireDate});
-            $cookies.put('patient_id', response.data.user_id, {'expires': expireDate});
+            //$cookies.put('user_id', response.data.user_id, {'expires': expireDate});
+            //$cookies.put('password', response.data.password, {'expires': expireDate});
+            //$cookies.put('patient_id', response.data.user_id, {'expires': expireDate});
+            localStorage.setItem("user_id", response.data.user_id);
+            localStorage.setItem("password", response.data.password);
+            localStorage.setItem("patient_id", response.data.user_id);
           //}
           $state.go('app.questionnaire');
         } else {
