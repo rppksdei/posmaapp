@@ -154,15 +154,51 @@ angular.module('starter.controllers', [])
     $scope.closeLogin = function() {
         $scope.modal.hide();
     };
-  
+    
+    $scope.cpData = {};
     $scope.changePassword = function(){
         if(typeof $rootScope.appUrl === 'undefined'){
           $rootScope.appUrl = localStorage.getItem("apiurl");
         }
-        var postData = {}; $scope.cpData = {};
+        var postData = {};
+        $scope.old_pwd = '';
         postData.patient   = $cookies.get('user_id');
         postData.password  = $cookies.get('password');
+
+      console.log('postData : ',postData);
+        $scope.old_pwd = postData.password;
         $scope.modal.show();
+    }
+    
+    $scope.cp_save = function(){
+        if(typeof $rootScope.appUrl === 'undefined'){
+          $rootScope.appUrl = localStorage.getItem("apiurl");
+        }
+        var postData = {};
+        //postData.patient    = $cookies.get('user_id');
+        postData._id        = $cookies.get('user_id');
+        postData.password   = $scope.cpData.newpassword;
+
+        var request = {
+          method: 'POST',
+          data: '_id=' + postData._id + '&password=' + postData.password,
+          url: $rootScope.appUrl+'/patient/updatepassword',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        };
+        $http(request).then(function(response){
+          console.log('response = ',response.data);
+          if (response.data.success) {
+            $scope.success_message = 'Password has been changed successfully.';
+          } else{
+            $scope.err_message = "Password can't be changed now.";
+          }
+          $timeout(function(){
+                $scope.success_message = '';
+                $scope.modal.remove(); //close the popup after 3 seconds for some reason
+            }, 3000);
+        })
     }
     
     $scope.notifications = function(){
