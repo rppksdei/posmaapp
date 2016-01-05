@@ -1,8 +1,8 @@
 angular.module('starter.controllers', [])
   .controller('AppCtrl', function($state,$scope,$http,$q,$cookies,$rootScope) {})
-  .controller('authCtrl', function($scope,$http,$ionicModal, $timeout,$state, $location,$cookies,$rootScope, Flash) {
-    localStorage.setItem("apiurl", "http://localhost:8987");
-    $rootScope.appUrl = 'http://localhost:8987';
+  .controller('authCtrl', function($scope,$http,$ionicModal, $timeout,$state, $location,$rootScope, Flash, $ionicHistory) {
+    localStorage.setItem("apiurl", "http://192.155.246.146:8987");
+    $rootScope.appUrl = 'http://192.155.246.146:8987';
     // Form data for the login modal
     var flag = false;
     var logout = false;
@@ -23,7 +23,10 @@ angular.module('starter.controllers', [])
       };
       $http(request).then(function(response){
         if (response.data.success == true) {
-          $cookies.remove('patient_id');
+          //$cookies.remove('patient_id');
+          $ionicHistory.clearHistory();
+          //localStorage.removeItem("patient_id");
+          localStorage.clear();
           $rootScope.user = {};
           $state.go('login');
         } else{
@@ -64,7 +67,7 @@ angular.module('starter.controllers', [])
       })
     }
   })
-  .controller('PatientCtrl', function($state,$scope,$http,$q,$cookies,$rootScope,Flash) {
+  .controller('PatientCtrl', function($state,$scope,$http,$q,$rootScope,Flash) {
     if(typeof $rootScope.appUrl === 'undefined'){
       $rootScope.appUrl = localStorage.getItem("apiurl");
     }
@@ -74,7 +77,7 @@ angular.module('starter.controllers', [])
     }
     $scope.getDetails = function(){
       var patientData = {};
-      var patient_id = $cookies.get('user_id');
+      var patient_id = localStorage.getItem("user_id");//$cookies.get('user_id');
       var request = {
         method: 'POST',
         data: 'pId=' + patient_id,
@@ -113,7 +116,7 @@ angular.module('starter.controllers', [])
     $scope.savePatient = function(){
       var post_patientData = {};
       post_patientData = JSON.stringify($scope.patientData);
-      var looged_in_patient = $cookies.get('patient_id');
+      var looged_in_patient = localStorage.getItem("patient_id");//$cookies.get('patient_id');
       if(looged_in_patient == $scope.patientData._id){
         var request = {
           method: 'POST',
@@ -138,7 +141,7 @@ angular.module('starter.controllers', [])
       $scope.getDetails();
     }
   })
-  .controller('NotificationCtrl', function($state,$scope,$http,$q,$cookies,$rootScope,$ionicPopup, $timeout,moment,$ionicModal) {
+  .controller('NotificationCtrl', function($state,$scope,$http,$q,$rootScope,$ionicPopup, $timeout,moment,$ionicModal) {
     if(typeof $rootScope.appUrl === 'undefined'){
       $rootScope.appUrl = localStorage.getItem("apiurl");
     }
@@ -165,8 +168,8 @@ angular.module('starter.controllers', [])
         }
         var postData = {};
         $scope.old_pwd = '';
-        postData.patient   = $cookies.get('user_id');
-        postData.password  = $cookies.get('password');
+        postData.patient   = localStorage.getItem("user_id");//$cookies.get('user_id');
+        postData.password  = localStorage.getItem("password");//$cookies.get('password');
 
       console.log('postData : ',postData);
         $scope.old_pwd = postData.password;
@@ -179,7 +182,7 @@ angular.module('starter.controllers', [])
         }
         var postData = {};
         //postData.patient    = $cookies.get('user_id');
-        postData._id        = $cookies.get('user_id');
+        postData._id        = localStorage.getItem("user_id");//$cookies.get('user_id');
         postData.password   = $scope.cpData.newpassword;
 
         var request = {
@@ -206,7 +209,8 @@ angular.module('starter.controllers', [])
     
     $scope.notifications = function(){
       var postData = {};
-      postData.patient_id = $cookies.get('user_id');
+      //postData.patient_id = $cookies.get('user_id');
+      postData.patient_id = localStorage.getItem("user_id");
       postData.is_filled = 0;
       var request = {
         method: 'POST',
@@ -235,7 +239,8 @@ angular.module('starter.controllers', [])
     }
   })
 
-  .controller('QuestionsCtrl', function($scope,$stateParams,$http,$state,$cookies,$rootScope, Flash) {
+
+  .controller('QuestionsCtrl', function($scope,$stateParams,$http,$state,$rootScope, Flash) {
 
     var flag = false;
     if (typeof $state.current.flag !== 'undefined') {
@@ -260,9 +265,10 @@ angular.module('starter.controllers', [])
       // postData.patient_id = $cookies.get('user_id');
       // postData.is_filled = 0;
 
-      var notification_id = $stateParams.id;
+        var notification_id = $stateParams.id;
         $scope.notification_id = notification_id;
         $scope.notification = {};
+    
         var request = {
           method: 'POST',
           url: $rootScope.appUrl+'/notification/getQuestionnaire',
@@ -276,7 +282,8 @@ angular.module('starter.controllers', [])
             postData.questionnaire = res.data.questionnaire._id;
             $scope.notification.clinic = res.data.questionnaire.clinic;
             $scope.notification.datetime = res.data.created;
-            postData.patient_id = $cookies.get('user_id');
+            //postData.patient_id = $cookies.get('user_id');
+            postData.patient_id = localStorage.getItem("user_id");
             postData.is_filled = 0;
             $scope.questionnaire = postData.questionnaire;
             var request = {
@@ -333,7 +340,7 @@ angular.module('starter.controllers', [])
               admin_alerts[key].question = key;
               admin_alerts[key].ans = ansId;
               admin_alerts[key].anstype = $scope.quesType[key];
-              admin_alerts[key].patient = $cookies.get('user_id');
+              admin_alerts[key].patient = localStorage.getItem("user_id");//$cookies.get('user_id');
               admin_alerts[key].questionnaire = $scope.questionnaire;
               admin_alerts[key].datetime = $scope.notification.datetime;
               admin_alerts[key].clinic = $scope.notification.clinic;
@@ -364,7 +371,7 @@ angular.module('starter.controllers', [])
           admin_alerts[quest].question = quest;
           admin_alerts[quest].multians = ansArr;
           admin_alerts[quest].anstype = $scope.quesType[quest];
-          admin_alerts[quest].patient = $cookies.get('user_id');
+          admin_alerts[quest].patient = localStorage.getItem("user_id");//$cookies.get('user_id');
           admin_alerts[quest].questionnaire = $scope.questionnaire;
           admin_alerts[quest].datetime = $scope.notification.datetime;
           admin_alerts[quest].clinic = $scope.notification.clinic;
@@ -375,7 +382,7 @@ angular.module('starter.controllers', [])
       /* End of to store admin alerts */
 
       var postData = {};
-      postData.patient          = $cookies.get('user_id');
+      postData.patient          = localStorage.getItem("user_id");//$cookies.get('user_id');
       postData.notification_id  = $stateParams.id;
       postData.questionnaire    = $scope.questionnaire;
       //postData.quesData         = $scope.quesData;
@@ -405,6 +412,7 @@ angular.module('starter.controllers', [])
         }
       });
     }
+    alert(flag);
     if(flag=='questions'){
       $scope.questions();
     }
