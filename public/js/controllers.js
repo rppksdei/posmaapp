@@ -246,6 +246,7 @@ angular.module('starter.controllers', [])
     $scope.answerModel = {};
     $scope.questions = function(){
       $scope.quesData = {};
+      $scope.textData = {};
       $scope.ansData = {};
       $scope.quesType = {};
       var postData = {};
@@ -333,6 +334,10 @@ angular.module('starter.controllers', [])
               admin_alerts[key].datetime = $scope.notification.datetime;
               admin_alerts[key].clinic = $scope.notification.clinic;
             }
+          } else if($scope.quesType[key] == 'text' || $scope.quesType[key] == 'number'){
+            //ansId = ansValArr[0];
+            //ansVal = ansValArr[1];
+            quesDataNew[key] = $scope.quesData[key];
           }
         }
       }
@@ -356,17 +361,20 @@ angular.module('starter.controllers', [])
               }
             }
           }
-          admin_alerts[quest].question = quest;
-          admin_alerts[quest].multians = ansArr;
-          admin_alerts[quest].anstype = $scope.quesType[quest];
-          admin_alerts[quest].patient = $cookies.get('user_id');
-          admin_alerts[quest].questionnaire = $scope.questionnaire;
-          admin_alerts[quest].datetime = $scope.notification.datetime;
-          admin_alerts[quest].clinic = $scope.notification.clinic;
+          if(ansArr.length > 0){
+            admin_alerts[quest].question = quest;
+            admin_alerts[quest].multians = ansArr;
+            admin_alerts[quest].anstype = $scope.quesType[quest];
+            admin_alerts[quest].patient = $cookies.get('user_id');
+            admin_alerts[quest].questionnaire = $scope.questionnaire;
+            admin_alerts[quest].datetime = $scope.notification.datetime;
+            admin_alerts[quest].clinic = $scope.notification.clinic;
+          }
+          
         }
       }
 
-      console.log(admin_alerts);
+      
       /* End of to store admin alerts */
 
       var postData = {};

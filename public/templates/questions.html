@@ -19,6 +19,17 @@
 					Q: {{ques.name}}
 					<input type="hidden" ng-model="quesType[ques._id]"/>
 					<!-- <input type="text" name="typeqq_{{ques._id}}" id="typeqq_{{ques._id}}" ng-value="ques.answer_type" ng-model="quesType[ques._id]"> -->
+					<div class="row" ng-if='ques.answer_type=="text"'>
+						<div class="col">
+							<div class="list">
+								<label class="item item-input">
+									
+									<textarea rows="5" cols="6" ng-model="quesData[ques._id]"></textarea>
+								</label>
+						    </div>
+						</div>
+					</div>
+
 					<div class="row" ng-if='ques.answer_type=="rb"'>
 						<div class="col">
 							<ion-list ng-if='ques.answer' class="list">
@@ -26,16 +37,6 @@
 								</ion-radio>
 
 					      	</ion-list>
-						</div>
-					</div>
-					<div class="row" ng-if='ques.answer_type=="text"'>
-						<div class="col">
-							<div class="list">
-								<label class="item item-input">
-									
-									<textarea rows="5" cols="6" ng-model="quesData[ques._id]">Answer Answer </textarea>
-								</label>
-						    </div>
 						</div>
 					</div>
 					<div class="row" ng-if='ques.answer_type=="dd"'>
@@ -51,7 +52,7 @@
 						<div class="col">
 							<div class="list">
 								<div class="item range range-positive">
-									{{ques.min_range}} <input type="range" name="volume" min="ques.min_range" max="ques.max_range" value="" ng-model="quesData[ques._id]"> {{ques.max_range}}
+									{{ques.min_range}} <input type="range" name="volume" min="ques.min_range" max="ques.max_range" ng-model="quesData[ques._id]"> {{ques.max_range}}
 								</div>
 							</div>
 						</div>
