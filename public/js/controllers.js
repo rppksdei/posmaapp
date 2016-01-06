@@ -421,7 +421,7 @@ angular.module('starter.controllers', [])
         }
       });
     }
-    alert(flag);
+    //alert(flag);
     if(flag=='questions'){
       $scope.questions();
     }
