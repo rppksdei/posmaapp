@@ -378,7 +378,7 @@ angular.module('starter.controllers', [])
             admin_alerts[quest].question = quest;
             admin_alerts[quest].multians = ansArr;
             admin_alerts[quest].anstype = $scope.quesType[quest];
-            admin_alerts[quest].patient = $cookies.get('user_id');
+            admin_alerts[quest].patient = localStorage.getItem("user_id");
             admin_alerts[quest].questionnaire = $scope.questionnaire;
             admin_alerts[quest].datetime = $scope.notification.datetime;
             admin_alerts[quest].clinic = $scope.notification.clinic;
