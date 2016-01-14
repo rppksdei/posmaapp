@@ -1,12 +1,13 @@
 angular.module('starter.controllers', [])
   .controller('AppCtrl', function($state,$scope,$http,$q,$cookies,$rootScope) {})
   .controller('authCtrl', function($scope,$http,$ionicModal, $timeout,$state, $location,$rootScope, Flash, $ionicHistory) {
+
     localStorage.setItem("apiurl", "http://192.155.246.146:8987");
     $rootScope.appUrl = 'http://192.155.246.146:8987';
     
     // localStorage.setItem("apiurl", "http://localhost:8987");
     // $rootScope.appUrl = 'http://localhost:8987';
-    
+
     // Form data for the login modal
     var flag = false;
     var logout = false;
