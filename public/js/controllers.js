@@ -3,6 +3,10 @@ angular.module('starter.controllers', [])
   .controller('authCtrl', function($scope,$http,$ionicModal, $timeout,$state, $location,$rootScope, Flash, $ionicHistory) {
     localStorage.setItem("apiurl", "http://192.155.246.146:8987");
     $rootScope.appUrl = 'http://192.155.246.146:8987';
+    
+    // localStorage.setItem("apiurl", "http://localhost:8987");
+    // $rootScope.appUrl = 'http://localhost:8987';
+    
     // Form data for the login modal
     var flag = false;
     var logout = false;
@@ -50,6 +54,7 @@ angular.module('starter.controllers', [])
       };
       $http(request).then(function(response){
         if (!response.data.error) {
+          
           //if ($scope.remember === true){
             var expireDate = new Date();
             expireDate.setDate(expireDate.getDate() + 30);
@@ -59,6 +64,27 @@ angular.module('starter.controllers', [])
             localStorage.setItem("user_id", response.data.user_id);
             localStorage.setItem("password", response.data.password);
             localStorage.setItem("patient_id", response.data.user_id);
+            
+            //alert(localStorage.getItem("device_id"));
+            if(typeof localStorage.getItem("device_id") != 'undefined'){
+                var deviceId = localStorage.getItem("device_id");
+                var request = {
+                  method: 'POST',
+                  url: localStorage.getItem("apiurl")+'/front_patient/update',
+                  headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                  },
+                  data: 'device_id=' + deviceId + '&_id=' + response.data.user_id
+                };
+                $http(request).then(function(resp){
+                  if (!resp.data.error) {
+                    console.log(resp.data);
+                    //$scope.error_message = resp.data.success;
+                  } else {
+                    $scope.error_message = resp.data.message;
+                  }
+                })
+            }
           //}
           $state.go('app.questionnaire');
         } else {
@@ -141,7 +167,7 @@ angular.module('starter.controllers', [])
       $scope.getDetails();
     }
   })
-  .controller('NotificationCtrl', function($state,$scope,$http,$q,$rootScope,$ionicPopup, $timeout,moment,$ionicModal) {
+  .controller('NotificationCtrl', function($state,$scope,$http,$q,$rootScope,$ionicPopup, $timeout,moment,$ionicModal,$ionicLoading) {
     if(typeof $rootScope.appUrl === 'undefined'){
       $rootScope.appUrl = localStorage.getItem("apiurl");
     }
@@ -177,6 +203,7 @@ angular.module('starter.controllers', [])
     }
     
     $scope.cp_save = function(){
+      
         if(typeof $rootScope.appUrl === 'undefined'){
           $rootScope.appUrl = localStorage.getItem("apiurl");
         }
@@ -208,6 +235,15 @@ angular.module('starter.controllers', [])
     }
     
     $scope.notifications = function(){
+      
+      $ionicLoading.show({
+          content: 'Loading',
+          animation: 'fade-in',
+          showBackdrop: true,
+          maxWidth: 200,
+          showDelay: 0
+      });
+      
       var postData = {};
       //postData.patient_id = $cookies.get('user_id');
       postData.patient_id = localStorage.getItem("user_id");
@@ -221,6 +257,7 @@ angular.module('starter.controllers', [])
         }
       };
       $http(request).then(function(response){
+        $ionicLoading.hide();
         if (!response.data.error) {
           $scope.questionnaires = response.data;
           for (var i = 0; i < response.data.length; i++) {
@@ -240,8 +277,16 @@ angular.module('starter.controllers', [])
   })
 
 
-  .controller('QuestionsCtrl', function($scope,$stateParams,$http,$state,$rootScope, Flash) {
-
+  .controller('QuestionsCtrl', function($scope,$stateParams,$http,$state,$rootScope, Flash,$ionicLoading) {
+    
+    $ionicLoading.show({
+        content: 'Loading',
+        animation: 'fade-in',
+        showBackdrop: true,
+        maxWidth: 200,
+        showDelay: 0
+    });
+    
     var flag = false;
     if (typeof $state.current.flag !== 'undefined') {
       flag = $state.current.flag;
@@ -296,6 +341,7 @@ angular.module('starter.controllers', [])
               }
             };
             $http(request).then(function(response){
+              $ionicLoading.hide();
               if (!response.data.error) {
                 $scope.questionnaires = response.data;
                 for(quest in $scope.questionnaires.question){
@@ -317,6 +363,14 @@ angular.module('starter.controllers', [])
       $scope.pageSize = $scope.currentPage * DEFAULT_PAGE_SIZE_STEP;
     }
     $scope.ques_save = function(){
+      $ionicLoading.show({
+          content: 'Loading',
+          animation: 'fade-in',
+          showBackdrop: true,
+          maxWidth: 200,
+          showDelay: 0
+      });
+      
       if(typeof $rootScope.appUrl === 'undefined'){
         $rootScope.appUrl = localStorage.getItem("apiurl");
       }
@@ -387,9 +441,7 @@ angular.module('starter.controllers', [])
         }
       }
 
-      
       /* End of to store admin alerts */
-
       var postData = {};
       postData.patient          = localStorage.getItem("user_id");//$cookies.get('user_id');
       postData.notification_id  = $stateParams.id;
@@ -412,6 +464,7 @@ angular.module('starter.controllers', [])
         data: 'postFullData=' + JSON.stringify(postfullData)
       };
       $http(request).then(function(response){
+        $ionicLoading.hide();
         if(response.data.success){
           $scope.error_message = 'Answers have been saved successfully.';
           Flash.create('success', $scope.error_message, 'alert alert-success');
