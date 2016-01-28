@@ -2,11 +2,11 @@ angular.module('starter.controllers', [])
   .controller('AppCtrl', function($state,$scope,$http,$q,$cookies,$rootScope) {})
   .controller('authCtrl', function($scope,$http,$ionicModal, $timeout,$state, $location,$rootScope, Flash, $ionicHistory) {
 
-    localStorage.setItem("apiurl", "http://localhost:8987");
-    $rootScope.appUrl = 'http://localhost:8987';
+    //localStorage.setItem("apiurl", "http://localhost:8987");
+    //$rootScope.appUrl = 'http://localhost:8987';
     
-    //localStorage.setItem("apiurl", "http://52.8.32.31:8987");
-    //$rootScope.appUrl = 'http://52.8.32.31:8987';
+    localStorage.setItem("apiurl", "http://52.8.32.31:8987");
+    $rootScope.appUrl = 'http://52.8.32.31:8987';
     
     // localStorage.setItem("apiurl", "http://localhost:8987");
     // $rootScope.appUrl = 'http://localhost:8987';
