@@ -6,6 +6,8 @@
 
 var starter = angular.module('starter', ['ionic','starter.controllers','ngCookies','flash','angularMoment','ionic-datepicker','ngCordova'])
 
+var authScope = '1234567890po23sm45a56';
+
 //angular.module('starter', ['ionic', 'starter.controllers'])
 starter
 .run(function($ionicPlatform,$rootScope,$cordovaPush) {
@@ -33,12 +35,6 @@ starter
       });
         
       push.on('notification', function(data) {
-            // data.message,
-            // data.title,
-            // data.count,
-            // data.sound,
-            // data.image,
-            // data.additionalData
             alert(data);
       });
         
@@ -80,7 +76,8 @@ starter
           controller: 'NotificationCtrl'
         }
       },
-      cache:false
+      cache:false,
+      resolve:{'logged_in':checkloggedIn}
     })
     .state('app.questions', {
       cache:false,
