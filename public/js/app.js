@@ -10,7 +10,7 @@ var starter = angular.module('starter', ['ionic','starter.controllers','ngCookie
 starter
 .run(function($ionicPlatform,$rootScope,$cordovaPush) {
   $ionicPlatform.ready(function() {
-    //alert("Hello 1");
+    
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
@@ -20,33 +20,37 @@ starter
       StatusBar.styleDefault();
     }
     
-    /* PUSH NOTIFICATIONS CONFIGURATION as on ngCordova-- start */
-      var push = PushNotification.init({
-            android: {senderID: "707879217713"},
-            ios: {alert: "true",badge: "true",sound: "true"},
-            windows: {}
-      });
-        
-      push.on('registration', function(data) {
-            alert('registrationId \n'+data.registrationId);
-            localStorage.setItem("device_id", data.registrationId);
-      });
-        
-      push.on('notification', function(data) {
-            // data.message,
-            // data.title,
-            // data.count,
-            // data.sound,
-            // data.image,
-            // data.additionalData
-            alert(data);
-      });
-        
-      push.on('error', function(e) {
-            // e.message
-            alert(e);
-      });
-    /* PUSH NOTIFICATIONS CONFIGURATION -- end. */
+      /* PUSH NOTIFICATIONS CONFIGURATION as on ngCordova-- start */
+            
+            var push = PushNotification.init({
+                  android: {senderID: "707879217713"},
+                  ios: {alert: "true",badge: "true",sound: "true"},
+                  windows: {}
+            });
+              
+            push.on('registration', function(data) {
+                  alert('registrationId \n'+data.registrationId);
+                  localStorage.setItem("device_id", data.registrationId);
+            });
+              
+            push.on('notification', function(data) {
+                  // data.message,
+                  // data.title,
+                  // data.count,
+                  // data.sound,
+                  // data.image,
+                  // data.additionalData
+                  alert(JSON.stringify(data));
+            });
+              
+            push.on('error', function(e) {
+                  // e.message
+                  alert(e);
+            });
+            
+      /* PUSH NOTIFICATIONS CONFIGURATION -- end. */
+
+
   });
 })
 .config(function($stateProvider, $urlRouterProvider) {

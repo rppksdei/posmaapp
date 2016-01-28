@@ -5,6 +5,9 @@ angular.module('starter.controllers', [])
     localStorage.setItem("apiurl", "http://192.155.246.146:8987");
     $rootScope.appUrl = 'http://192.155.246.146:8987';
     
+    //localStorage.setItem("apiurl", "http://52.8.32.31:8987");
+    //$rootScope.appUrl = 'http://52.8.32.31:8987';
+    
     // localStorage.setItem("apiurl", "http://localhost:8987");
     // $rootScope.appUrl = 'http://localhost:8987';
 
@@ -66,21 +69,21 @@ angular.module('starter.controllers', [])
             localStorage.setItem("password", response.data.password);
             localStorage.setItem("patient_id", response.data.user_id);
             
-            //alert(localStorage.getItem("device_id"));
             if(typeof localStorage.getItem("device_id") != 'undefined'){
                 var deviceId = localStorage.getItem("device_id");
+		var uid = response.data.user_id;
                 var request = {
                   method: 'POST',
                   url: localStorage.getItem("apiurl")+'/front_patient/update',
                   headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                   },
-                  data: 'device_id=' + deviceId + '&_id=' + response.data.user_id
+		  data: '_id=' + uid + '&device_id=' + deviceId
                 };
+
                 $http(request).then(function(resp){
                   if (!resp.data.error) {
-                    console.log(resp.data);
-                    //$scope.error_message = resp.data.success;
+                    console.log('resp.data = ', resp.data);
                   } else {
                     $scope.error_message = resp.data.message;
                   }
