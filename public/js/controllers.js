@@ -1,15 +1,17 @@
 angular.module('starter.controllers', [])
   .controller('AppCtrl', function($state,$scope,$http,$q,$cookies,$rootScope) {})
   .controller('authCtrl', function($scope,$http,$ionicModal, $timeout,$state, $location,$rootScope, Flash, $ionicHistory) {
-
-    //localStorage.setItem("apiurl", "http://localhost:8987");
-    //$rootScope.appUrl = 'http://localhost:8987';
+  // -- enable for localhost --
+    localStorage.setItem("apiurl", "http://localhost:8987");
+    $rootScope.appUrl = 'http://localhost:8987';
     
-    localStorage.setItem("apiurl", "http://52.8.32.31:8987");
-    $rootScope.appUrl = 'http://52.8.32.31:8987';
+  // -- enable for live server --
+    // localStorage.setItem("apiurl", "http://52.8.32.31:8987");
+    // $rootScope.appUrl = 'http://52.8.32.31:8987';
     
-    // localStorage.setItem("apiurl", "http://localhost:8987");
-    // $rootScope.appUrl = 'http://localhost:8987';
+  // -- enable for staging server --
+    //localStorage.setItem("apiurl", "http://192.155.246.146:8987");
+    //$rootScope.appUrl = 'http://192.155.246.146:8987';
 
     // Form data for the login modal
     var flag = false;
