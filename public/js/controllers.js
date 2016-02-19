@@ -282,6 +282,7 @@ angular.module('starter.controllers', [])
     }
   })
   .controller('FitbitCtrl', function($state,$scope,$http,$q,$rootScope,$ionicPopup, $timeout,moment,$ionicModal,$ionicLoading) {
+    //console.log('hiiii');
     if(typeof $rootScope.appUrl === 'undefined'){
       $rootScope.appUrl = localStorage.getItem("apiurl");
     }
@@ -291,6 +292,42 @@ angular.module('starter.controllers', [])
     }
     
     $scope.cpData = {};
+    // fetch HR from database.
+    $scope.fetchHR = function(){
+        $ionicLoading.show({
+            content: 'Loading',
+            animation: 'fade-in',
+            showBackdrop: true,
+            maxWidth: 200,
+            showDelay: 0
+        });
+        
+        var postData = {};
+        postData.patient_id = localStorage.getItem("user_id");
+        postData.date = moment().unix();
+        console.log('postData = ', postData);
+        var request = {
+          method: 'POST',
+          data: '_id=' + postData.patient_id + '&date=' + postData.date,
+          url: $rootScope.appUrl+'/fitbit/getFitbitHR',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        };
+        $http(request).then(function(response){
+          $ionicLoading.hide();
+          if (!response.data.error) {
+            $scope.hrdata = response.data;
+            console.log('$scope.hrdata = ', $scope.hrdata);
+            //for (var i = 0; i < response.data.length; i++) {
+            //  $scope.questionnaires[i].ntime   = moment.unix(response.data[i].datetime).format('HH:mm');
+            //  $scope.questionnaires[i].ndate   = moment.unix(response.data[i].datetime).format('MM/DD/YYYY');
+            //}
+          } else{
+            $scope.error_message = response.data.message;
+          }
+        })
+    }
     
     // function to authorize fitbit api.
     $scope.authorize = function(){
@@ -363,7 +400,8 @@ angular.module('starter.controllers', [])
     }
     
     if(flag == 'hr'){
-      $scope.getheartrate();
+      //$scope.getheartrate();
+      $scope.fetchHR();
     }else if(flag == 'authorize'){
       $scope.authorize();
     }
