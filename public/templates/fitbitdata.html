@@ -1,0 +1,79 @@
+<style type="text/css">
+.item-select select{
+	border: 1px solid;
+    direction: ltr;
+    max-width: 100%;
+    padding: 7px 10px 7px 0;
+    position: relative;
+    width: 100%;
+ }
+ </style>
+<ion-view view-title="{{questionnaires.name}}">
+	<ion-content>
+		Total Questions: {{questionnaires.question.length}} 
+		<form name="quesForm" id="quesForm">
+			<ion-list class="questionnaire">
+				<input type="hidden" ng-model ="notification.datetime" />
+				<input type="hidden" ng-model ="notification.clinic" />
+				<ion-item class="item item-divider border-top wrpnrml" ng-repeat="ques in questionnaires.question | limitTo:pageSize">
+					Q: {{ques.name}}
+					<input type="hidden" ng-model="quesType[ques._id]"/>
+					<!-- <input type="text" name="typeqq_{{ques._id}}" id="typeqq_{{ques._id}}" ng-value="ques.answer_type" ng-model="quesType[ques._id]"> -->
+					<div class="row" ng-if='ques.answer_type=="text"'>
+						<div class="col">
+							<div class="list">
+								<label class="item item-input">
+									
+									<textarea rows="5" cols="6" ng-model="quesData[ques._id]"></textarea>
+								</label>
+						    </div>
+						</div>
+					</div>
+
+					<div class="row" ng-if='ques.answer_type=="rb"'>
+						<div class="col">
+							<ion-list ng-if='ques.answer' class="list">
+								<ion-radio ng-repeat="ans in ques.answer" name="{{ques._id}}" ng-value="ans._id+'-'+ans.out_of_range" ng-model="quesData[ques._id]"> {{ans.name}}
+								</ion-radio>
+
+					      	</ion-list>
+						</div>
+					</div>
+					<div class="row" ng-if='ques.answer_type=="dd"'>
+						<div class="col">
+							<label ng-if='ques.answer' class="item item-input item-select">
+								<select class="input-label" ng-model="quesData[ques._id]">
+									<option ng-repeat="ans in ques.answer" value="ans._id+'-'+ans.out_of_range">{{ans.name}}</option>
+								</select>
+							</label>
+						</div>
+					</div>
+					<div class="row" ng-if='ques.answer_type=="number"'>
+						<div class="col">
+							<div class="list">
+								<div class="item range range-positive">
+									{{ques.min_range}} <input type="range" name="volume" min="ques.min_range" max="ques.max_range" ng-model="quesData[ques._id]"> {{ques.max_range}}
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div ng-if='ques.answer_type=="cb"' class="row responsive-sm">
+						<div class="col" ng-repeat="ans2 in ques.answer">
+								<input type="checkbox" ng-model ="ansData[ques._id][ans2._id][ans2.out_of_range]" /> {{ans2.name}}
+						</div>
+					</div>
+
+
+				</ion-item>
+		        
+				<button type="button" class="button button-block button-dark" ng-if="pageSize < questionnaires.question.length" ng-click="loadNextPage()">
+					Show More
+				</button>
+				<button ng-click="ques_save();" type="submit" class="button button-block button-dark" ng-if="pageSize >= questionnaires.question.length">
+					Save
+				</button>
+			</ion-list>
+		</form>
+	</ion-content>
+</ion-view>

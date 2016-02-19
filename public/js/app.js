@@ -109,6 +109,28 @@ starter
         }
       }
     })
+    .state('app.fitbit', {
+      cache:false,
+      url: '/fitbit',
+      flag: 'authorize',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/fitbitdata.html',
+          controller: 'FitbitCtrl',
+        }
+      }
+    })
+    //.state('app.fitbit', {
+    //  cache:false,
+    //  url: '/fitbit/hr',
+    //  flag: 'hr',
+    //  views: {
+    //    'menuContent': {
+    //      templateUrl: 'templates/fitbitdata.html',
+    //      controller: 'FitbitCtrl',
+    //    }
+    //  }
+    //})
     /*
     .state('app.questions', {
       cache:false,
