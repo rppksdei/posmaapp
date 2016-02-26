@@ -329,6 +329,44 @@ angular.module('starter.controllers', [])
         })
     }
     
+    /** fetch STEPS from database. **/
+    $scope.fetchSteps = function(){
+        $ionicLoading.show({
+            content: 'Loading',
+            animation: 'fade-in',
+            showBackdrop: true,
+            maxWidth: 200,
+            showDelay: 0
+        });
+        
+        var postData = {};
+        postData.patient_id = localStorage.getItem("user_id");
+        postData.date = moment().unix();
+        console.log('postData = ', postData);
+        var request = {
+          method: 'POST',
+          data: '_id=' + postData.patient_id + '&date=' + postData.date,
+          url: $rootScope.appUrl+'/fitbit/getFitbitSteps',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        };
+        $http(request).then(function(response){
+          $ionicLoading.hide();
+          if (!response.data.error) {
+            console.log('response = ', response);
+            $scope.stepsdata = response.data;
+            //console.log('$scope.stepsdata = ', $scope.stepsdata);
+            //for (var i = 0; i < response.data.length; i++) {
+            //  $scope.questionnaires[i].ntime   = moment.unix(response.data[i].datetime).format('HH:mm');
+            //  $scope.questionnaires[i].ndate   = moment.unix(response.data[i].datetime).format('MM/DD/YYYY');
+            //}
+          } else{
+            $scope.error_message = response.data.message;
+          }
+        })
+    }
+    
     // function to authorize fitbit api.
     $scope.authorize = function(){
         $ionicLoading.show({
@@ -400,10 +438,11 @@ angular.module('starter.controllers', [])
     }
     
     if(flag == 'hr'){
-      //$scope.getheartrate();
-      $scope.fetchHR();
+        $scope.fetchHR();
     }else if(flag == 'authorize'){
-      $scope.authorize();
+        $scope.authorize();
+    }else if(flag == 'step'){
+        $scope.fetchSteps();
     }
     
   })

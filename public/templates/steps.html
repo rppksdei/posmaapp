@@ -1,0 +1,12 @@
+<ion-view view-title="Last Week Steps">
+    <ion-nav-buttons side="right">
+    </ion-nav-buttons>
+    <ion-content>
+	<ion-list class="questionnaire" show-delete="shouldShowDelete" show-reorder="shouldShowReorder" can-swipe="listCanSwipe">
+	      	<ion-item class="item item-divider border-right ques-lnk question-padding" ng-repeat="hr in stepsdata">
+		    <div class="ques-title">Steps : {{hr.steps}}</div>
+                    <div class="time">Date : {{hr.date}}</div>
+	      	</ion-item>
+	</ion-list>
+    </ion-content>
+</ion-view>
