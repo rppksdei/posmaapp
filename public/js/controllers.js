@@ -2,11 +2,11 @@ angular.module('starter.controllers', [])
   .controller('AppCtrl', function($state,$scope,$http,$q,$cookies,$rootScope) {})
   .controller('authCtrl', function($scope,$http,$ionicModal, $timeout,$state, $location,$rootScope, Flash, $ionicHistory) {
 
-    //localStorage.setItem("apiurl", "http://localhost:8987");
-    //$rootScope.appUrl = 'http://localhost:8987';
+    localStorage.setItem("apiurl", "http://localhost:8987");
+    $rootScope.appUrl = 'http://localhost:8987';
     
-    localStorage.setItem("apiurl", "http://52.8.32.31:8987");
-    $rootScope.appUrl = 'http://52.8.32.31:8987';
+    //localStorage.setItem("apiurl", "http://52.8.32.31:8987");
+    //$rootScope.appUrl = 'http://52.8.32.31:8987';
     
     // localStorage.setItem("apiurl", "http://localhost:8987");
     // $rootScope.appUrl = 'http://localhost:8987';
@@ -61,6 +61,8 @@ angular.module('starter.controllers', [])
           
           //if ($scope.remember === true){
             var expireDate = new Date();
+            var d = new Date();
+            var timezone = d.getTimezoneOffset();
             expireDate.setDate(expireDate.getDate() + 30);
             //$cookies.put('user_id', response.data.user_id, {'expires': expireDate});
             //$cookies.put('password', response.data.password, {'expires': expireDate});
@@ -71,14 +73,14 @@ angular.module('starter.controllers', [])
             
             if(typeof localStorage.getItem("device_id") != 'undefined'){
                 var deviceId = localStorage.getItem("device_id");
-		var uid = response.data.user_id;
+		            var uid = response.data.user_id;
                 var request = {
                   method: 'POST',
                   url: localStorage.getItem("apiurl")+'/front_patient/update',
                   headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                   },
-		  data: '_id=' + uid + '&device_id=' + deviceId
+		              data: '_id=' + uid + '&device_id=' + deviceId + '&gmt=' + timezone
                 };
 
                 $http(request).then(function(resp){
