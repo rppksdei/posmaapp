@@ -2,14 +2,17 @@ angular.module('starter.controllers', [])
   .controller('AppCtrl', function($state,$scope,$http,$q,$cookies,$rootScope) {})
   .controller('authCtrl', function($scope,$http,$ionicModal, $timeout,$state, $location,$rootScope, Flash, $ionicHistory) {
 
+  // -- enable for localhost --
     localStorage.setItem("apiurl", "http://localhost:8987");
     $rootScope.appUrl = 'http://localhost:8987';
     
-    //localStorage.setItem("apiurl", "http://52.8.32.31:8987");
-    //$rootScope.appUrl = 'http://52.8.32.31:8987';
+  // -- enable for live server --
+    // localStorage.setItem("apiurl", "http://52.8.32.31:3000");
+    // $rootScope.appUrl = 'http://52.8.32.31:3000';
     
-    // localStorage.setItem("apiurl", "http://localhost:8987");
-    // $rootScope.appUrl = 'http://localhost:8987';
+  // -- enable for staging server --
+    //localStorage.setItem("apiurl", "http://192.155.246.146:8987");
+    //$rootScope.appUrl = 'http://192.155.246.146:8987';
 
     // Form data for the login modal
     var flag = false;
@@ -281,7 +284,171 @@ angular.module('starter.controllers', [])
       $scope.notifications();
     }
   })
-
+  .controller('FitbitCtrl', function($state,$scope,$http,$q,$rootScope,$ionicPopup, $timeout,moment,$ionicModal,$ionicLoading) {
+    //console.log('hiiii');
+    if(typeof $rootScope.appUrl === 'undefined'){
+      $rootScope.appUrl = localStorage.getItem("apiurl");
+    }
+    var flag = false;
+    if (typeof $state.current.flag !== 'undefined') {
+      flag = $state.current.flag;
+    }
+    
+    $scope.cpData = {};
+    // fetch HR from database.
+    $scope.fetchHR = function(){
+        $ionicLoading.show({
+            content: 'Loading',
+            animation: 'fade-in',
+            showBackdrop: true,
+            maxWidth: 200,
+            showDelay: 0
+        });
+        
+        var postData = {};
+        postData.patient_id = localStorage.getItem("user_id");
+        postData.date = moment().unix();
+        console.log('postData = ', postData);
+        var request = {
+          method: 'POST',
+          data: '_id=' + postData.patient_id + '&date=' + postData.date,
+          url: $rootScope.appUrl+'/fitbit/getFitbitHR',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        };
+        $http(request).then(function(response){
+          $ionicLoading.hide();
+          if (!response.data.error) {
+            $scope.hrdata = response.data;
+            console.log('$scope.hrdata = ', $scope.hrdata);
+            //for (var i = 0; i < response.data.length; i++) {
+            //  $scope.questionnaires[i].ntime   = moment.unix(response.data[i].datetime).format('HH:mm');
+            //  $scope.questionnaires[i].ndate   = moment.unix(response.data[i].datetime).format('MM/DD/YYYY');
+            //}
+          } else{
+            $scope.error_message = response.data.message;
+          }
+        })
+    }
+    
+    /** fetch STEPS from database. **/
+    $scope.fetchSteps = function(){
+        $ionicLoading.show({
+            content: 'Loading',
+            animation: 'fade-in',
+            showBackdrop: true,
+            maxWidth: 200,
+            showDelay: 0
+        });
+        
+        var postData = {};
+        postData.patient_id = localStorage.getItem("user_id");
+        postData.date = moment().unix();
+        console.log('postData = ', postData);
+        var request = {
+          method: 'POST',
+          data: '_id=' + postData.patient_id + '&date=' + postData.date,
+          url: $rootScope.appUrl+'/fitbit/getFitbitSteps',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        };
+        $http(request).then(function(response){
+          $ionicLoading.hide();
+          if (!response.data.error) {
+            console.log('response = ', response);
+            $scope.stepsdata = response.data;
+            //console.log('$scope.stepsdata = ', $scope.stepsdata);
+            //for (var i = 0; i < response.data.length; i++) {
+            //  $scope.questionnaires[i].ntime   = moment.unix(response.data[i].datetime).format('HH:mm');
+            //  $scope.questionnaires[i].ndate   = moment.unix(response.data[i].datetime).format('MM/DD/YYYY');
+            //}
+          } else{
+            $scope.error_message = response.data.message;
+          }
+        })
+    }
+    
+    // function to authorize fitbit api.
+    $scope.authorize = function(){
+        $ionicLoading.show({
+            content: 'Loading',
+            animation: 'fade-in',
+            showBackdrop: true,
+            maxWidth: 200,
+            showDelay: 0
+        });
+        
+        var postData = {};
+        postData.patient_id = localStorage.getItem("user_id");
+        //postData.is_filled = 0;
+        var request = {
+          method: 'GET',
+          //data: 'pId=' + postData.patient_id,
+          url: $rootScope.appUrl+'/fitbit/authorize',
+          type:"JSONP",
+          /*
+          options: {
+              'Origin'                        : 'http://localhost:8987/fitbit/authorize',//www.nczonline.net
+              'Access-Control-Request-Method' : 'POST',
+              'Access-Control-Request-Headers': 'Origin',
+              'Access-Control-Allow-Origin'   : '*'
+          }
+          */
+        };
+        return $http.jsonp($rootScope.appUrl + '/fitbit/authorize');
+        $http(request).then(function(response){
+          console.log(response)
+          $ionicLoading.hide();
+        });
+         
+    }
+    
+    // function to get heartrate values from fitbit api.
+    $scope.getheartrate = function(){
+        $ionicLoading.show({
+            content: 'Loading',
+            animation: 'fade-in',
+            showBackdrop: true,
+            maxWidth: 200,
+            showDelay: 0
+        });
+        
+        var postData = {};
+        postData.patient_id = localStorage.getItem("user_id");
+        //postData.is_filled = 0;
+        var request = {
+          method: 'POST',
+          data: 'pId=' + postData.patient_id,
+          url: $rootScope.appUrl+'/fitbit/fitbit_auth_callback',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        };
+        $http(request).then(function(response){
+          $ionicLoading.hide();
+          if (!response.data.error) {
+            $scope.questionnaires = response.data;
+            for (var i = 0; i < response.data.length; i++) {
+              $scope.questionnaires[i].ntime   = moment.unix(response.data[i].datetime).format('HH:mm');
+              $scope.questionnaires[i].ndate   = moment.unix(response.data[i].datetime).format('MM/DD/YYYY');
+            }
+          } else{
+            $scope.error_message = response.data.message;
+          }
+        })
+    }
+    
+    if(flag == 'hr'){
+        $scope.fetchHR();
+    }else if(flag == 'authorize'){
+        $scope.authorize();
+    }else if(flag == 'step'){
+        $scope.fetchSteps();
+    }
+    
+  })
 
   .controller('QuestionsCtrl', function($scope,$stateParams,$http,$state,$rootScope, Flash,$ionicLoading) {
     
