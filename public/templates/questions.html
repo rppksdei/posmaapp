@@ -52,7 +52,7 @@
 						<div class="col">
 							<div class="list">
 								<div class="item range range-positive">
-									{{ques.min_range}} <input type="range" name="volume" min="ques.min_range" max="ques.max_range" ng-model="quesData[ques._id]"> {{ques.max_range}}
+									{{ques.min_range}} <input steps="1" type="range" min="{{ques.min_range}}" max="{{ques.max_range}}" ng-model="quesData[ques._id]" value="{{ques.min_range}}"> {{ques.max_range}}
 								</div>
 							</div>
 						</div>

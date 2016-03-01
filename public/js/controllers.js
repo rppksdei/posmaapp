@@ -576,6 +576,7 @@ angular.module('starter.controllers', [])
           } else if($scope.quesType[key] == 'text' || $scope.quesType[key] == 'number'){
             //ansId = ansValArr[0];
             //ansVal = ansValArr[1];
+            console.log($scope.quesData[key]);
             quesDataNew[key] = $scope.quesData[key];
           }
         }
