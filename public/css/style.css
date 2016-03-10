@@ -1,1 +1,8 @@
 /* Empty. Add your own CSS if you like */
+.card{margin: 0px;}
+.card-terms{height: 20%; overflow: scroll; text-align: justify;}
+/*.item-content disable-pointer-events span{vertical-align: middle;color: red;}*/
+.chkboxDiv .item-checkbox{float: left;background: transparent;padding-left:40px;}
+.chkboxDiv .item-checkbox .checkbox{margin-top:-15px}
+.chkboxDiv span{vertical-align: -webkit-baseline-middle; vertical-align: -moz-middle-with-baseline}
+.modal .title{left: 0px !important;right: 0px !important;margin: 0px;}

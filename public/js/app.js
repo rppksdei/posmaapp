@@ -8,6 +8,7 @@ var starter = angular.module('starter', ['ionic','starter.controllers','ngCookie
 
 //var authScope = '1234567890po23sm45a56';
 var authScope = 'front';
+
 function checkloggedIn($rootScope, $http, $location) {
     $http.get('/front_patient/checkloggedin', {headers: {'auth-token': authScope}}).success(function(data) {
         if (data.error) {
@@ -18,6 +19,14 @@ function checkloggedIn($rootScope, $http, $location) {
         }
     });  
 }
+
+function checkLocalStorage($rootScope, $http, $location) {
+      if((localStorage.getItem("username") != null) && (localStorage.getItem("password") != null)){
+          console.log('if');
+          $location.path('/app/questionnaire');          
+      }
+}
+
 //angular.module('starter', ['ionic', 'starter.controllers'])
 starter
 .run(function($ionicPlatform,$rootScope,$cordovaPush) {
@@ -39,9 +48,9 @@ starter
                   ios: {alert: "true",badge: "true",sound: "true"},
                   windows: {}
             });
-              
+            //alert(push);
             push.on('registration', function(data) {
-                  alert('registrationId \n'+data.registrationId);
+                  //alert('registrationId \n'+data.registrationId);
                   localStorage.setItem("device_id", data.registrationId);
             });
               
@@ -52,12 +61,12 @@ starter
                   // data.sound,
                   // data.image,
                   // data.additionalData
-                  alert(JSON.stringify(data));
+                  //alert(JSON.stringify(data));
             });
               
             push.on('error', function(e) {
                   // e.message
-                  alert(e);
+                  //alert(e);
             });
             
       /* PUSH NOTIFICATIONS CONFIGURATION -- end. */
@@ -71,7 +80,8 @@ starter
       //abstract: true,
       templateUrl: 'templates/login.html',
       controller: 'authCtrl',
-      flag:'login'
+      flag:'login',
+      resolve:{'check_local_storage':checkLocalStorage}
     })
     .state('logout', {
       url: '/logout',

@@ -3,10 +3,11 @@
     </ion-nav-buttons>
     <ion-content>
 	<ion-list class="questionnaire" show-delete="shouldShowDelete" show-reorder="shouldShowReorder" can-swipe="listCanSwipe">
-	      	<ion-item class="item item-divider border-right ques-lnk question-padding" ng-repeat="hr in stepsdata">
+	      	<ion-item ng-if="stepsdata" class="item item-divider border-right ques-lnk question-padding" ng-repeat="hr in stepsdata">
 		    <div class="ques-title">Steps : {{hr.steps}}</div>
                     <div class="time">Date : {{hr.date}}</div>
 	      	</ion-item>
+		<div ng-if="norecords" class="center">{{norecords}}</div>
 	</ion-list>
     </ion-content>
 </ion-view>

@@ -8,7 +8,7 @@
       <div class="list">
         <label class="item item-input" ng-class="{'has-error': loginForm.username.$dirty && (loginForm.username.$error.required || errordetail.username)}">
           <i class="icon ion-email placeholder-icon"></i>
-          <input type="text" placeholder="Username" name="username" id="username" ng-model="loginData.username" ng-minlength="2" ng-maxlength="20" required>
+          <input type="text" placeholder="Username" name="username" id="username" ng-change="check_terms();" ng-model="loginData.username" ng-minlength="2" ng-maxlength="20" required>
         </label>
         <div ng-show="loginForm.username.$dirty && (loginForm.username.$error.required || errordetail.username)" class="login-err error-container">
           Username is required.
@@ -20,7 +20,14 @@
         <div ng-show="loginForm.password.$dirty && (loginForm.password.$error.required || errordetail.password)" class="login-err error-container">
           Password is required.
         </div>
-        <button class="button button-block button-dark" ng-disabled="loginForm.$invalid" type="submit">
+        <!--<ion-list>-->
+        <div class="chkboxDiv" ng-if="is_read_terms_exist != 1">
+          <ion-checkbox ng-model="loginData.is_read_terms" id="tnc" name="tnc" value=""></ion-checkbox>
+          <span>I have read the <a href="#" ng-click="view_disclaimer();">Terms &amp; Conditions.</a></span>
+        </div>
+        <!--</ion-list>-->
+        <!--<button class="button button-block button-dark" ng-disabled="(loginForm.$invalid == true) || (loginData.is_read_terms != true)" type="submit">-->
+          <button class="button button-block button-dark" ng-disabled="loginForm.$invalid" type="submit">
           LogIn
         </button>   
         <!--ion-item class="link" href="#/app/questionnaire">
@@ -30,26 +37,3 @@
     </form>
   </ion-content>
 </ion-view>
-
-<!--ion-modal-view>
-  <ion-header-bar>
-    <h1 class="title">Login</h1>
-  </ion-header-bar>
-  <ion-content>
-    <form ng-submit="sign_in()">
-      <div class="list">
-        <label class="item item-input">
-          <span class="input-label">Username</span>
-          <input type="text" ng-model="loginData.username">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">Password</span>
-          <input type="password" ng-model="loginData.password">
-        </label>
-        <label class="item">
-          <button class="button button-block button-positive">Log in</button>
-        </label>
-      </div>
-    </form>
-  </ion-content>
-</ion-modal-view-->

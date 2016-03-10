@@ -1,14 +1,14 @@
 angular.module('starter.controllers', [])
   .controller('AppCtrl', function($state,$scope,$http,$q,$cookies,$rootScope) {})
-  .controller('authCtrl', function($scope,$http,$ionicModal, $timeout,$state, $location,$rootScope, Flash, $ionicHistory) {
+  .controller('authCtrl', function($scope,$http,$ionicModal, $timeout,$state, $location,$rootScope, Flash, $ionicHistory, $ionicViewService) {
 
   // -- enable for localhost --
-    localStorage.setItem("apiurl", "http://localhost:8987");
-    $rootScope.appUrl = 'http://localhost:8987';
+    //localStorage.setItem("apiurl", "http://localhost:8987");
+    //$rootScope.appUrl = 'http://localhost:8987';
     
   // -- enable for live server --
-    // localStorage.setItem("apiurl", "http://52.8.32.31:3000");
-    // $rootScope.appUrl = 'http://52.8.32.31:3000';
+     localStorage.setItem("apiurl", "http://52.8.32.31:3000");
+     $rootScope.appUrl = 'http://52.8.32.31:3000';
     
   // -- enable for staging server --
     //localStorage.setItem("apiurl", "http://192.155.246.146:8987");
@@ -23,7 +23,15 @@ angular.module('starter.controllers', [])
     if(typeof $rootScope.appUrl === 'undefined'){
       $rootScope.appUrl = localStorage.getItem("apiurl");
     }
-    if (logout == true) {
+    //if (logout == true) {
+    if (flag == 'logout') {
+      //alert('in logout');
+          localStorage.clear();
+          $rootScope.user = {};
+          $ionicHistory.clearHistory();
+          $ionicViewService.nextViewOptions({disableBack: true});
+          $ionicHistory.clearCache().then(function(){ $state.go('login') });
+      /*
       var request = {
         method: 'GET',
         url: localStorage.getItem("apiurl")+'/front_patient/loggedout',
@@ -34,23 +42,81 @@ angular.module('starter.controllers', [])
       };
       $http(request).then(function(response){
         if (response.data.success == true) {
-          //$cookies.remove('patient_id');
-          $ionicHistory.clearHistory();
-          //localStorage.removeItem("patient_id");
+          alert('if');
           localStorage.clear();
           $rootScope.user = {};
-          $state.go('login');
+          $ionicHistory.clearHistory();
+          $ionicViewService.nextViewOptions({disableBack: true});
+          $ionicHistory.clearCache().then(function(){ $state.go('login') });
+          
+          //localStorage.removeItem("patient_id");
+          //$state.go('login');
         } else{
+          alert('else');
           $location.path('app/questionnaire');
           // $state.go('app.questionnaire');
         }
       })
+      */
     }
+    
+    $ionicModal.fromTemplateUrl('templates/disclaimer.html', {
+      scope: $scope
+    }).then(function(modal) {
+      $scope.modal = modal;
+    });
+    
+    // Triggered in the login modal to close it
+    $scope.closeLogin = function() {
+        $scope.modal.hide();
+    };
+    
     $scope.loginData = {};
+    
+    $scope.check_terms = function(){
+        //alert($scope.loginData.username + ' - ' +$scope.loginData.password);
+        var postData = {};
+        postData.username = $scope.loginData.username;
+        //postData.password = $scope.loginData.password;
+        var request = {
+            method: 'POST',
+            url: localStorage.getItem("apiurl")+'/front_patient/checkTerms',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: 'username=' + postData.username
+        };
+        $http(request).then(function(response){
+          console.log('response', response);
+          $scope.is_read_terms_exist = 0;
+          if (response.data != null) {
+            //alert('success');
+              $scope.is_read_terms_exist = response.data.is_read_terms;
+          } else {
+            console.log('check_terms error : ', response.data);
+            //$scope.error_message = response.data.message;
+          }
+        })
+    }
+    
+    $scope.view_disclaimer = function(){
+      //alert('In disclaimer...');
+      $scope.modal.show();
+    }
+    
     $scope.sign_in = function(){
       var postData = {};
-      postData.username = $scope.loginData.username;
-      postData.password = $scope.loginData.password;
+      if((localStorage.getItem("username") != null) && (localStorage.getItem("password") != null)){
+          postData.username = localStorage.getItem("username");
+          postData.password = localStorage.getItem("password");
+      }else if(($scope.loginData.username != null) || ($scope.loginData.password != null)){
+          postData.username = $scope.loginData.username;
+          postData.password = $scope.loginData.password;
+          if($scope.loginData.is_read_terms != null){
+            localStorage.setItem("is_read_terms", 1);
+          }
+      }
+      
       var request = {
         method: 'POST',
         url: localStorage.getItem("apiurl")+'/front_patient/login',
@@ -72,18 +138,21 @@ angular.module('starter.controllers', [])
             //$cookies.put('patient_id', response.data.user_id, {'expires': expireDate});
             localStorage.setItem("user_id", response.data.user_id);
             localStorage.setItem("password", response.data.password);
+            localStorage.setItem("username", response.data.username);
             localStorage.setItem("patient_id", response.data.user_id);
             
             if(typeof localStorage.getItem("device_id") != 'undefined'){
                 var deviceId = localStorage.getItem("device_id");
-		            var uid = response.data.user_id;
+		var is_read_terms = localStorage.getItem("is_read_terms");
+          console.log('is_read_terms = ', is_read_terms);
+                var uid = response.data.user_id;
                 var request = {
                   method: 'POST',
                   url: localStorage.getItem("apiurl")+'/front_patient/update',
                   headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                   },
-		              data: '_id=' + uid + '&device_id=' + deviceId + '&gmt=' + timezone
+		  data: '_id=' + uid + '&device_id=' + deviceId + '&gmt=' + timezone + '&is_read_terms=' + is_read_terms
                 };
 
                 $http(request).then(function(resp){
@@ -101,6 +170,11 @@ angular.module('starter.controllers', [])
         }
       })
     }
+    
+    //if (flag=="login") {
+    //  // function to check if 'is_terms_read' is 1.
+    //    $scope.check_terms();
+    //}
   })
   .controller('PatientCtrl', function($state,$scope,$http,$q,$rootScope,Flash) {
     if(typeof $rootScope.appUrl === 'undefined'){
@@ -176,7 +250,8 @@ angular.module('starter.controllers', [])
       $scope.getDetails();
     }
   })
-  .controller('NotificationCtrl', function($state,$scope,$http,$q,$rootScope,$ionicPopup, $timeout,moment,$ionicModal,$ionicLoading) {
+  .controller('NotificationCtrl', function($state,$scope,$http,$q,$rootScope,$ionicPopup, $timeout,moment,$ionicModal,$ionicLoading,$ionicViewService) {
+    $ionicViewService.nextViewOptions({disableBack: true});
     if(typeof $rootScope.appUrl === 'undefined'){
       $rootScope.appUrl = localStorage.getItem("apiurl");
     }
@@ -318,9 +393,15 @@ angular.module('starter.controllers', [])
           }
         };
         $http(request).then(function(response){
+        console.log('---', response);
           $ionicLoading.hide();
           if (!response.data.error) {
-            $scope.hrdata = response.data;
+            if (response.data.length == 0) {
+              $scope.norecords = "No data available.";
+            }else{
+              $scope.hrdata = response.data;
+            }
+            
             console.log('$scope.hrdata = ', $scope.hrdata);
             //for (var i = 0; i < response.data.length; i++) {
             //  $scope.questionnaires[i].ntime   = moment.unix(response.data[i].datetime).format('HH:mm');
@@ -357,13 +438,12 @@ angular.module('starter.controllers', [])
         $http(request).then(function(response){
           $ionicLoading.hide();
           if (!response.data.error) {
+            if (response.data.length == 0) {
+              $scope.norecords = "No data available.";
+            }else{
+              $scope.stepsdata = response.data;
+            }
             console.log('response = ', response);
-            $scope.stepsdata = response.data;
-            //console.log('$scope.stepsdata = ', $scope.stepsdata);
-            //for (var i = 0; i < response.data.length; i++) {
-            //  $scope.questionnaires[i].ntime   = moment.unix(response.data[i].datetime).format('HH:mm');
-            //  $scope.questionnaires[i].ndate   = moment.unix(response.data[i].datetime).format('MM/DD/YYYY');
-            //}
           } else{
             $scope.error_message = response.data.message;
           }
